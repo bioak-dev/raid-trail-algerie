@@ -62,19 +62,24 @@
     }
   ];
 
-  const MOTO_SVG = `<svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const MOTO_SVG = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="11" fill="rgba(184,92,56,0.2)" stroke="#B85C38" stroke-width="1"/>
     <circle cx="5.5" cy="17.5" r="2.5" fill="#1A3A5C" stroke="#fff" stroke-width="1"/>
     <circle cx="18.5" cy="17.5" r="2.5" fill="#1A3A5C" stroke="#fff" stroke-width="1"/>
-    <path d="M8 17h8M5.5 15l2.5-6h4l1.5 3h3l1 3" stroke="#B85C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M8 17h8M5.5 15l2.5-6h4l1.5 3h3l1 3" stroke="#B85C38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M11 9l1-3h2l1 3" stroke="#B85C38" stroke-width="1.5" stroke-linecap="round"/>
   </svg>`;
 
-  let map, motoMarker, pathPoints = [], stagePathIndex = [];
-  let pathIndex = 0;
+  const MOTO_SPEED = 12; /* points par seconde le long du tracé */
+
+  let map, motoMarker, traveledLine, pathPoints = [], stagePathIndex = [];
+  let pathProgress = 0;
   let animating = false;
-  let animTimer = null;
+  let rafId = null;
+  let lastFrameTime = 0;
   let currentStage = 0;
   let stageMarkers = [];
+  let userPaused = false;
 
   function buildDensePath(stages, stepsPerLeg) {
     const points = [[stages[0].lat, stages[0].lng]];
@@ -105,10 +110,36 @@
   function createMotoIcon(bearing) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div style="transform:rotate(${bearing - 90}deg);width:36px;height:36px;margin:-18px 0 0 -18px">${MOTO_SVG}</div>`,
-      iconSize: [36, 36],
-      iconAnchor: [18, 18]
+      html: `<div class="moto-marker-inner" style="transform:rotate(${bearing - 90}deg)">${MOTO_SVG}</div>`,
+      iconSize: [48, 48],
+      iconAnchor: [24, 24]
     });
+  }
+
+  function setMotoRotation(bearing) {
+    const el = motoMarker?.getElement()?.querySelector('.moto-marker-inner');
+    if (el) el.style.transform = `rotate(${bearing - 90}deg)`;
+  }
+
+  function getInterpolatedPosition(progress) {
+    const max = pathPoints.length - 1;
+    const p = Math.max(0, Math.min(progress, max));
+    const idx = Math.floor(p);
+    const frac = p - idx;
+    const a = pathPoints[idx];
+    const b = pathPoints[Math.min(idx + 1, max)];
+    return {
+      lat: a[0] + (b[0] - a[0]) * frac,
+      lng: a[1] + (b[1] - a[1]) * frac,
+      bearing: getBearing(a[0], a[1], b[0], b[1]),
+      idx
+    };
+  }
+
+  function updateTraveledLine(progress) {
+    if (!traveledLine) return;
+    const idx = Math.ceil(progress);
+    traveledLine.setLatLngs(pathPoints.slice(0, idx + 1));
   }
 
   function createStageIcon(num, active) {
@@ -168,42 +199,56 @@
     });
   }
 
-  function moveMotoToPathIndex(idx, updateStage) {
+  function moveMotoAlongPath(progress, updateStage) {
     if (!motoMarker || !pathPoints.length) return;
-    pathIndex = Math.max(0, Math.min(idx, pathPoints.length - 1));
-    const curr = pathPoints[pathIndex];
-    const next = pathPoints[Math.min(pathIndex + 1, pathPoints.length - 1)];
-    const bearing = getBearing(curr[0], curr[1], next[0], next[1]);
-    motoMarker.setLatLng(curr);
-    motoMarker.setIcon(createMotoIcon(bearing));
+    pathProgress = Math.max(0, Math.min(progress, pathPoints.length - 1));
+    const pos = getInterpolatedPosition(pathProgress);
 
-    const progress = document.getElementById('journeyProgressBar');
-    if (progress) progress.style.width = `${(pathIndex / (pathPoints.length - 1)) * 100}%`;
+    motoMarker.setLatLng([pos.lat, pos.lng]);
+    setMotoRotation(pos.bearing);
+    updateTraveledLine(pathProgress);
+
+    const progressBar = document.getElementById('journeyProgressBar');
+    if (progressBar) {
+      progressBar.style.width = `${(pathProgress / (pathPoints.length - 1)) * 100}%`;
+    }
 
     if (updateStage) {
-      const stage = stageForPathIndex(pathIndex);
+      const stage = stageForPathIndex(pos.idx);
       if (stage !== currentStage) {
         currentStage = stage;
         updatePreview(stage, true);
+        if (map && animating) {
+          map.panTo([pos.lat, pos.lng], { animate: true, duration: 0.8 });
+        }
       }
     }
   }
 
+  function moveMotoToStage(stage) {
+    pathProgress = pathIndexForStage(stage);
+    moveMotoAlongPath(pathProgress, false);
+  }
+
   function selectStage(stage, fly) {
-    stopAnimation();
+    stopAnimation(false);
     currentStage = stage;
-    pathIndex = pathIndexForStage(stage);
-    moveMotoToPathIndex(pathIndex, false);
+    moveMotoToStage(stage);
     updatePreview(stage, true);
+    updateTraveledLine(pathProgress);
 
     if (map && fly) {
       map.flyTo([routeStages[stage].lat, routeStages[stage].lng], 9, { duration: 1.2 });
     }
+
+    setTimeout(() => { if (!userPaused) startAnimation(); }, fly ? 1500 : 500);
   }
 
-  function stopAnimation() {
+  function stopAnimation(fromUser) {
     animating = false;
-    if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+    if (fromUser === true) userPaused = true;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    lastFrameTime = 0;
     const playBtn = document.getElementById('journeyPlay');
     const pauseBtn = document.getElementById('journeyPause');
     if (playBtn) playBtn.hidden = false;
@@ -211,30 +256,36 @@
   }
 
   function startAnimation() {
-    stopAnimation();
+    if (animating) return;
+    userPaused = false;
     animating = true;
-    document.getElementById('journeyPlay').hidden = true;
-    document.getElementById('journeyPause').hidden = false;
+    lastFrameTime = 0;
+    const playBtn = document.getElementById('journeyPlay');
+    const pauseBtn = document.getElementById('journeyPause');
+    if (playBtn) playBtn.hidden = true;
+    if (pauseBtn) pauseBtn.hidden = false;
 
-    function step() {
+    function frame(timestamp) {
       if (!animating) return;
-      if (pathIndex >= pathPoints.length - 1) {
-        pathIndex = 0;
+
+      if (!lastFrameTime) lastFrameTime = timestamp;
+      const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+      lastFrameTime = timestamp;
+
+      pathProgress += MOTO_SPEED * dt;
+
+      if (pathProgress >= pathPoints.length - 1) {
+        pathProgress = 0;
         currentStage = 0;
-      } else {
-        pathIndex++;
-      }
-      moveMotoToPathIndex(pathIndex, true);
-
-      const stageAtPoint = stageForPathIndex(pathIndex);
-      if (stageAtPoint !== currentStage) {
-        currentStage = stageAtPoint;
-        updatePreview(currentStage, true);
+        updatePreview(0, true);
+        if (traveledLine) traveledLine.setLatLngs([]);
       }
 
-      animTimer = setTimeout(step, 45);
+      moveMotoAlongPath(pathProgress, true);
+      rafId = requestAnimationFrame(frame);
     }
-    step();
+
+    rafId = requestAnimationFrame(frame);
   }
 
   function buildTimeline() {
@@ -265,6 +316,11 @@
 
     map = L.map('map', { scrollWheelZoom: false }).setView([36.3, 4.5], 7);
 
+    map.createPane('routePane');
+    map.createPane('motoPane');
+    map.getPane('routePane').style.zIndex = 450;
+    map.getPane('motoPane').style.zIndex = 650;
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
       maxZoom: 14
@@ -273,10 +329,21 @@
     /* Tracé de fond */
     L.polyline(pathPoints, {
       color: '#E8D5B7',
-      weight: 6,
-      opacity: 0.9,
+      weight: 8,
+      opacity: 0.95,
       lineCap: 'round',
-      lineJoin: 'round'
+      lineJoin: 'round',
+      pane: 'routePane'
+    }).addTo(map);
+
+    /* Tracé parcouru par la moto */
+    traveledLine = L.polyline([], {
+      color: '#B85C38',
+      weight: 6,
+      opacity: 1,
+      lineCap: 'round',
+      lineJoin: 'round',
+      pane: 'routePane'
     }).addTo(map);
 
     /* Segments cliquables par étape */
@@ -286,12 +353,11 @@
       const segPoints = pathPoints.slice(start, end + 1);
       const targetStage = i + 1;
       L.polyline(segPoints, {
-        color: '#B85C38',
-        weight: 5,
-        opacity: 0.85,
+        color: 'transparent',
+        weight: 16,
+        opacity: 0,
         className: 'route-segment',
-        lineCap: 'round',
-        lineJoin: 'round'
+        pane: 'routePane'
       }).addTo(map).on('click', () => selectStage(targetStage, true));
     }
 
@@ -305,16 +371,21 @@
       return marker;
     });
 
-    /* Moto animée */
+    /* Moto animée — toujours au-dessus du tracé */
     motoMarker = L.marker(pathPoints[0], {
       icon: createMotoIcon(270),
-      zIndexOffset: 2000
+      pane: 'motoPane',
+      zIndexOffset: 1000,
+      interactive: false
     }).addTo(map);
 
     map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48] });
 
-    document.getElementById('journeyPlay')?.addEventListener('click', startAnimation);
-    document.getElementById('journeyPause')?.addEventListener('click', stopAnimation);
+    document.getElementById('journeyPlay')?.addEventListener('click', () => {
+      userPaused = false;
+      startAnimation();
+    });
+    document.getElementById('journeyPause')?.addEventListener('click', () => stopAnimation(true));
     document.getElementById('prevStage')?.addEventListener('click', () => {
       selectStage((currentStage - 1 + routeStages.length) % routeStages.length, true);
     });
@@ -326,6 +397,20 @@
     mapEl.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
 
     updatePreview(0, false);
+
+    /* Démarrage auto : la moto avance dès l'affichage de la carte */
+    const parcoursSection = document.getElementById('parcours');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !userPaused) startAnimation();
+        else if (!entry.isIntersecting) stopAnimation(false);
+      });
+    }, { threshold: 0.25 });
+    if (parcoursSection) observer.observe(parcoursSection);
+
+    setTimeout(() => {
+      if (!userPaused && !animating) startAnimation();
+    }, 800);
   }
 
   if (document.readyState === 'loading') {

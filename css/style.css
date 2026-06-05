@@ -532,11 +532,24 @@ section:nth-child(even) { background: var(--sand); }
 .moto-marker-wrap {
   background: none !important;
   border: none !important;
-  transition: transform 0.12s linear;
+}
+
+.moto-marker-inner {
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45));
+  animation: moto-pulse 1.6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes moto-pulse {
+  0%, 100% { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.45)); }
+  50% { filter: drop-shadow(0 4px 14px rgba(184, 92, 56, 0.7)); }
 }
 
 .moto-marker-wrap svg {
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+  display: block;
 }
 
 .stage-marker-wrap {
