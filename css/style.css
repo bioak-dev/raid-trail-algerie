@@ -318,20 +318,267 @@ section:nth-child(even) { background: var(--sand); }
 
 .section-header .section-subtitle { margin-inline: auto; }
 
-/* ── Route / Parcours ── */
+/* ── Journey interactive map ── */
+.journey-interactive {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.journey-map-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#map {
+  width: 100%;
+  height: 520px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 1;
+}
+
+.journey-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.journey-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.25rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--terra);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.journey-btn:hover {
+  background: var(--terra-dark);
+  transform: translateY(-1px);
+}
+
+.journey-btn-secondary {
+  background: var(--blue-deep);
+}
+
+.journey-btn-secondary:hover { background: var(--blue-mid); }
+
+.journey-progress {
+  flex: 1;
+  min-width: 120px;
+  height: 4px;
+  background: var(--sand-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.journey-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--terra), var(--terra-dark));
+  border-radius: 2px;
+  transition: width 0.15s linear;
+}
+
+.journey-timeline {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.journey-timeline-btn {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.65rem 0.5rem;
+  border: 2px solid var(--sand-dark);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--blue-deep);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.journey-timeline-btn:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+}
+
+.journey-timeline-btn.active {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: var(--white);
+}
+
+.journey-preview {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.journey-preview-image {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.journey-preview-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.4s ease, transform 0.6s ease;
+}
+
+.journey-preview-image img.is-changing {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+.journey-preview-step {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(26, 58, 92, 0.85);
+  color: var(--white);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.journey-preview-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.journey-preview-tag {
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 0.35rem;
+}
+
+.journey-preview-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: var(--blue-deep);
+  margin-bottom: 0.75rem;
+}
+
+.journey-preview-desc {
+  font-size: 0.92rem;
+  color: var(--gray);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.journey-preview-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.journey-nav-btn {
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--sand-dark);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-size: 1.25rem;
+  color: var(--blue-deep);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.journey-nav-btn:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+  background: var(--sand);
+}
+
+/* Leaflet moto & stage markers */
+.moto-marker-wrap {
+  background: none !important;
+  border: none !important;
+  transition: transform 0.12s linear;
+}
+
+.moto-marker-wrap svg {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+.stage-marker-wrap {
+  background: none !important;
+  border: none !important;
+}
+
+.stage-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 3px solid var(--terra);
+  color: var(--terra);
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.stage-marker:hover,
+.stage-marker.active {
+  background: var(--terra);
+  color: var(--white);
+  transform: scale(1.15);
+}
+
+.leaflet-interactive.route-segment {
+  cursor: pointer;
+}
+
+/* legacy route (removed from HTML, keep minimal) */
 .route-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
-}
-
-#map {
-  width: 100%;
-  height: 480px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  z-index: 1;
 }
 
 .route-stops {
@@ -433,6 +680,8 @@ section:nth-child(even) { background: var(--sand); }
   text-transform: uppercase;
   color: var(--white);
 }
+
+/* duplicate #map removed above */
 
 /* ── Pricing ── */
 .pricing-cards {
@@ -923,6 +1172,10 @@ section:nth-child(even) { background: var(--sand); }
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
+  .journey-interactive { grid-template-columns: 1fr; }
+  #map { height: 400px; }
+  .journey-timeline-btn { min-width: calc(50% - 0.25rem); flex: unset; }
+
   .route-grid,
   .motos-grid { grid-template-columns: 1fr; }
 

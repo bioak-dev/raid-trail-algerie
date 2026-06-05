@@ -80,76 +80,43 @@
       <div class="section-header">
         <p class="section-label">Le parcours</p>
         <h2 class="section-title">De la côte à l'Atlas</h2>
-        <p class="section-subtitle">Cinq étapes entre mer et montagne, sur routes panoramiques et pistes soigneusement sélectionnées.</p>
+        <p class="section-subtitle">Cliquez sur une étape ou lancez le parcours — la moto vous guide à travers chaque paysage.</p>
       </div>
 
-      <div class="route-grid">
-        <div id="map" role="img" aria-label="Carte du raid Skikda — Constantine — Kherrata — Djurdjura — Oran"></div>
-        <div class="route-stops">
-          <div class="route-stop active" data-lat="36.876" data-lng="6.909" data-index="0">
-            <span class="route-stop-num">01</span>
-            <div class="route-stop-info">
-              <h3>Skikda</h3>
-              <p>Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.</p>
-              <span class="route-stop-tag">Jour 1 · Départ</span>
+      <div class="journey-interactive">
+        <div class="journey-map-wrap">
+          <div id="map" role="application" aria-label="Carte interactive du raid — cliquez sur une étape pour voir le paysage"></div>
+          <div class="journey-toolbar">
+            <button type="button" class="journey-btn" id="journeyPlay" aria-label="Lancer le parcours animé">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              Parcourir le tracé
+            </button>
+            <button type="button" class="journey-btn journey-btn-secondary" id="journeyPause" hidden aria-label="Mettre en pause">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+              Pause
+            </button>
+            <div class="journey-progress" aria-hidden="true">
+              <div class="journey-progress-bar" id="journeyProgressBar"></div>
             </div>
           </div>
-          <div class="route-stop" data-lat="36.365" data-lng="6.615" data-index="1">
-            <span class="route-stop-num">02</span>
-            <div class="route-stop-info">
-              <h3>Constantine</h3>
-              <p>La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.</p>
-              <span class="route-stop-tag">Jour 2 · Gorges</span>
-            </div>
-          </div>
-          <div class="route-stop" data-lat="36.497" data-lng="5.283" data-index="2">
-            <span class="route-stop-num">03</span>
-            <div class="route-stop-info">
-              <h3>Kherrata</h3>
-              <p>Canyon aux parois rouges — passage étroit et paysages grandioses.</p>
-              <span class="route-stop-tag">Jour 3 · Canyon</span>
-            </div>
-          </div>
-          <div class="route-stop" data-lat="36.417" data-lng="4.167" data-index="3">
-            <span class="route-stop-num">04</span>
-            <div class="route-stop-info">
-              <h3>Djurdjura</h3>
-              <p>Massif à 2 000 m — cols, forêts de cèdres et vues à perte de vue.</p>
-              <span class="route-stop-tag">Jours 4–5 · Montagne</span>
-            </div>
-          </div>
-          <div class="route-stop" data-lat="35.697" data-lng="-0.633" data-index="4">
-            <span class="route-stop-num">05</span>
-            <div class="route-stop-info">
-              <h3>Oran</h3>
-              <p>Arrivée sur la côte ouest — baie méditerranéenne et dernière étape conviviale.</p>
-              <span class="route-stop-tag">Jour 7 · Arrivée</span>
-            </div>
-          </div>
+          <div class="journey-timeline" id="journeyTimeline" role="tablist" aria-label="Étapes du parcours"></div>
         </div>
-      </div>
 
-      <div class="route-highlights">
-        <div class="highlight-card">
-          <img src="images/route-skikda.jpg" alt="Côte de Skikda, pins et falaises sur la Méditerranée" loading="lazy" width="400" height="300">
-          <div class="highlight-card-overlay"><h4>Skikda — Littoral est</h4></div>
-        </div>
-        <div class="highlight-card">
-          <img src="images/route-constantine.jpg" alt="Ponts suspendus et gorges de Constantine" loading="lazy" width="400" height="300">
-          <div class="highlight-card-overlay"><h4>Constantine — Gorges du Rhumel</h4></div>
-        </div>
-        <div class="highlight-card">
-          <img src="images/route-kherrata.jpg" alt="Gorges de Kherrata, canyon de roche rouge" loading="lazy" width="400" height="300">
-          <div class="highlight-card-overlay"><h4>Kherrata — Canyon rouge</h4></div>
-        </div>
-        <div class="highlight-card">
-          <img src="images/route-djurdjura.jpg" alt="Sommets enneigés du Djurdjura" loading="lazy" width="400" height="300">
-          <div class="highlight-card-overlay"><h4>Djurdjura — Hauts sommets</h4></div>
-        </div>
-        <div class="highlight-card">
-          <img src="images/route-oran.jpg" alt="Front de mer et baie d'Oran au coucher du soleil" loading="lazy" width="400" height="300">
-          <div class="highlight-card-overlay"><h4>Oran — Côte ouest</h4></div>
-        </div>
+        <aside class="journey-preview" id="journeyPreview" aria-live="polite">
+          <div class="journey-preview-image">
+            <img id="previewImg" src="images/route-skikda.jpg" alt="Côte de Skikda" width="600" height="400">
+            <span class="journey-preview-step" id="previewStep">Étape 1 / 5</span>
+          </div>
+          <div class="journey-preview-body">
+            <p class="journey-preview-tag" id="previewTag">Jour 1 · Départ</p>
+            <h3 class="journey-preview-title" id="previewTitle">Skikda</h3>
+            <p class="journey-preview-desc" id="previewDesc">Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.</p>
+            <div class="journey-preview-nav">
+              <button type="button" class="journey-nav-btn" id="prevStage" aria-label="Étape précédente">←</button>
+              <button type="button" class="journey-nav-btn" id="nextStage" aria-label="Étape suivante">→</button>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
