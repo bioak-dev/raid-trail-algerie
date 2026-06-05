@@ -893,6 +893,95 @@ section:nth-child(even) { background: var(--sand); }
 
 #pourquoi { background: var(--sand); }
 
+/* ── Security section ── */
+.security-section {
+  background: var(--blue-deep);
+  color: var(--white);
+  padding: 6rem 0;
+}
+
+.security-section .section-label { color: var(--sand); }
+
+.security-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 4px solid var(--terra);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+  max-width: 820px;
+  margin-inline: auto;
+}
+
+.security-banner-icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  background: rgba(184, 92, 56, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--terra);
+}
+
+.security-banner p {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.security-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 1.75rem 1.5rem;
+  transition: var(--transition);
+}
+
+.security-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(184, 92, 56, 0.4);
+  transform: translateY(-3px);
+}
+
+.security-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  background: rgba(184, 92, 56, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--terra);
+  margin-bottom: 1rem;
+}
+
+.security-card h3 {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--white);
+  margin-bottom: 0.65rem;
+}
+
+.security-card p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+}
+
 /* ── Motos & Assistance ── */
 .motos-grid {
   display: grid;
@@ -1188,6 +1277,7 @@ section:nth-child(even) { background: var(--sand); }
   .journey-interactive { grid-template-columns: 1fr; }
   #map { height: 400px; }
   .journey-timeline-btn { min-width: calc(50% - 0.25rem); flex: unset; }
+  .security-grid { grid-template-columns: 1fr 1fr; }
 
   .route-grid,
   .motos-grid { grid-template-columns: 1fr; }
@@ -1224,6 +1314,9 @@ section:nth-child(even) { background: var(--sand); }
   .hero-stats { gap: 2rem; }
 
   .gallery-grid { columns: 1; }
+
+  .security-grid { grid-template-columns: 1fr; }
+  .security-banner { flex-direction: column; text-align: center; align-items: center; }
 
   .motos-photos { grid-template-columns: 1fr; }
 
