@@ -121,10 +121,14 @@
     return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
   }
 
+  function motoRotation(bearing) {
+    return bearing + 90;
+  }
+
   function createMotoIcon(bearing) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div class="moto-marker-inner" style="transform:rotate(${bearing - 90}deg)">${MOTO_SVG}</div>`,
+      html: `<div class="moto-marker-inner" style="transform:rotate(${motoRotation(bearing)}deg)">${MOTO_SVG}</div>`,
       iconSize: [56, 32],
       iconAnchor: [28, 16]
     });
@@ -132,7 +136,7 @@
 
   function setMotoRotation(bearing) {
     const el = motoMarker?.getElement()?.querySelector('.moto-marker-inner');
-    if (el) el.style.transform = `rotate(${bearing - 90}deg)`;
+    if (el) el.style.transform = `rotate(${motoRotation(bearing)}deg)`;
   }
 
   function getInterpolatedPosition(progress) {
@@ -386,8 +390,9 @@
     });
 
     /* Moto animée — toujours au-dessus du tracé */
+    const startBearing = getBearing(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
     motoMarker = L.marker(pathPoints[0], {
-      icon: createMotoIcon(270),
+      icon: createMotoIcon(startBearing),
       pane: 'motoPane',
       zIndexOffset: 1000,
       interactive: false
