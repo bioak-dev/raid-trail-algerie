@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ── Navigation scroll effect ── */
   const nav = document.getElementById('nav');
   const navToggle = document.getElementById('navToggle');
@@ -62,31 +64,16 @@
     }
   ];
 
-  /* Icône moto trail/adventure vue de profil — orientée vers la droite */
-  const MOTO_SVG = `<svg width="56" height="32" viewBox="0 0 112 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <ellipse cx="56" cy="58" rx="36" ry="3.5" fill="rgba(0,0,0,0.18)"/>
-    <circle cx="24" cy="44" r="13" fill="#252525" stroke="#111" stroke-width="1.5"/>
-    <circle cx="24" cy="44" r="8.5" fill="#3a3a3a"/>
-    <circle cx="24" cy="44" r="2.5" fill="#666"/>
-    <circle cx="88" cy="44" r="13" fill="#252525" stroke="#111" stroke-width="1.5"/>
-    <circle cx="88" cy="44" r="8.5" fill="#3a3a3a"/>
-    <circle cx="88" cy="44" r="2.5" fill="#666"/>
-    <path d="M36 41 L24 44" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M76 39 L88 44" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M36 41 L48 30 L62 24 L74 26 L80 36 L76 39" stroke="#1A3A5C" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
-    <path d="M50 28 L58 20 L70 18 L76 24 L68 26 L54 30 Z" fill="#1A3A5C"/>
-    <ellipse cx="60" cy="27" rx="11" ry="6.5" fill="#B85C38" stroke="#9A4A2E" stroke-width="1"/>
-    <path d="M76 24 L84 16 M76 24 L84 28" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M72 20 L76 10" stroke="#7a9ab8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
-    <rect x="42" y="32" width="13" height="9" rx="1.5" fill="#4a4a4a" stroke="#333"/>
-    <path d="M36 39 Q30 37 26 33" stroke="#999" stroke-width="2" fill="none" stroke-linecap="round"/>
-    <circle cx="91" cy="31" r="3" fill="#fff8dc" stroke="#ccc" stroke-width="0.75"/>
-    <path d="M48 30 L44 26" stroke="#B85C38" stroke-width="2" stroke-linecap="round"/>
-  </svg>`;
+  const MOTO_ICON_SRC = 'images/moto-tenere-icon.png';
+  const MOTO_ICON_W = 56;
+  const MOTO_ICON_H = 35;
 
-  const MOTO_SPEED = 12; /* points par seconde le long du tracé */
+  const MOTO_SPEED = 10; /* points par seconde le long du tracé */
+  const STAGE_ZOOM = 9;
+  const FOLLOW_MARGIN = 0.28; /* marge écran avant recentrage */
 
   let map, motoMarker, traveledLine, pathPoints = [], stagePathIndex = [];
+  let mapReady = false;
   let pathProgress = 0;
   let animating = false;
   let rafId = null;
@@ -94,6 +81,10 @@
   let currentStage = 0;
   let stageMarkers = [];
   let userPaused = false;
+  let motoRotationDeg = null;
+  let isResetting = false;
+  let stageFlying = false;
+  let lastFollowTime = 0;
 
   function buildDensePath(stages, stepsPerLeg) {
     const points = [[stages[0].lat, stages[0].lng]];
@@ -121,22 +112,36 @@
     return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
   }
 
-  function motoRotation(bearing) {
-    return bearing + 90;
+  function getIconAngle(lat1, lng1, lat2, lng2) {
+    return getBearing(lat1, lng1, lat2, lng2) - 90;
   }
 
-  function createMotoIcon(bearing) {
+  function motoTransform(angle) {
+    return `rotate(${angle + 180}deg)`;
+  }
+
+  function createMotoIcon(angle) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div class="moto-marker-inner" style="transform:rotate(${motoRotation(bearing)}deg)">${MOTO_SVG}</div>`,
-      iconSize: [56, 32],
-      iconAnchor: [28, 16]
+      html: `<div class="moto-marker-inner" style="transform:${motoTransform(angle)}"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
+      iconSize: [MOTO_ICON_W, MOTO_ICON_H],
+      iconAnchor: [MOTO_ICON_W / 2, MOTO_ICON_H / 2]
     });
   }
 
-  function setMotoRotation(bearing) {
+  function setMotoRotation(angle) {
     const el = motoMarker?.getElement()?.querySelector('.moto-marker-inner');
-    if (el) el.style.transform = `rotate(${motoRotation(bearing)}deg)`;
+    if (!el) return;
+    const target = angle + 180;
+    if (motoRotationDeg === null) {
+      motoRotationDeg = target;
+    } else {
+      let diff = target - motoRotationDeg;
+      if (diff > 180) diff -= 360;
+      if (diff < -180) diff += 360;
+      motoRotationDeg += diff * 0.35;
+    }
+    el.style.transform = `rotate(${motoRotationDeg}deg)`;
   }
 
   function getInterpolatedPosition(progress) {
@@ -149,15 +154,27 @@
     return {
       lat: a[0] + (b[0] - a[0]) * frac,
       lng: a[1] + (b[1] - a[1]) * frac,
-      bearing: getBearing(a[0], a[1], b[0], b[1]),
+      bearing: getIconAngle(a[0], a[1], b[0], b[1]),
       idx
     };
   }
 
   function updateTraveledLine(progress) {
-    if (!traveledLine) return;
-    const idx = Math.ceil(progress);
-    traveledLine.setLatLngs(pathPoints.slice(0, idx + 1));
+    if (!traveledLine || !pathPoints.length) return;
+    const pos = getInterpolatedPosition(progress);
+    const idx = Math.floor(progress);
+    const pts = pathPoints.slice(0, idx + 1);
+    if (progress > 0) pts.push([pos.lat, pos.lng]);
+    traveledLine.setLatLngs(pts);
+  }
+
+  function createCityLabel(name) {
+    return L.divIcon({
+      className: 'city-label-wrap',
+      html: `<span class="city-label">${name}</span>`,
+      iconSize: [120, 28],
+      iconAnchor: [60, 42]
+    });
   }
 
   function createStageIcon(num, active) {
@@ -217,6 +234,82 @@
     });
   }
 
+  function focusStage(stage, lat, lng) {
+    if (!map || !routeStages[stage]) return;
+    map.stop();
+    stageFlying = true;
+    lastFollowTime = performance.now();
+    const s = routeStages[stage];
+    map.flyTo([lat ?? s.lat, lng ?? s.lng], STAGE_ZOOM, { duration: 1, easeLinearity: 0.25 });
+    map.once('moveend', () => { stageFlying = false; });
+  }
+
+  function followMoto(lat, lng) {
+    if (!map || !animating || isResetting || stageFlying) return;
+
+    const now = performance.now();
+    if (now - lastFollowTime < 160) return;
+
+    const pt = map.latLngToContainerPoint([lat, lng]);
+    const size = map.getSize();
+    const padX = size.x * FOLLOW_MARGIN;
+    const padY = size.y * FOLLOW_MARGIN;
+
+    if (pt.x < padX || pt.x > size.x - padX || pt.y < padY || pt.y > size.y - padY) {
+      lastFollowTime = now;
+      map.panTo([lat, lng], { animate: true, duration: 0.5, noMoveStart: true });
+    }
+  }
+
+  function resetJourneyLoop() {
+    isResetting = true;
+    pathProgress = 0;
+    currentStage = -1;
+    motoRotationDeg = null;
+    if (traveledLine) traveledLine.setLatLngs([]);
+    moveMotoAlongPath(0, true);
+    setTimeout(() => { isResetting = false; }, 400);
+  }
+
+  function animationFrame(timestamp) {
+    if (!animating) return;
+
+    if (!lastFrameTime) lastFrameTime = timestamp;
+    const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
+    lastFrameTime = timestamp;
+
+    if (isResetting) {
+      rafId = requestAnimationFrame(animationFrame);
+      return;
+    }
+
+    pathProgress += MOTO_SPEED * dt;
+
+    if (pathProgress >= pathPoints.length - 1) {
+      pathProgress = pathPoints.length - 1;
+      moveMotoAlongPath(pathProgress, true);
+      animating = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      lastFrameTime = 0;
+      const playBtn = document.getElementById('journeyPlay');
+      const pauseBtn = document.getElementById('journeyPause');
+      if (playBtn) playBtn.hidden = false;
+      if (pauseBtn) pauseBtn.hidden = true;
+      setTimeout(() => {
+        if (!userPaused && !prefersReducedMotion) {
+          resetJourneyLoop();
+          focusStage(0, pathPoints[0][0], pathPoints[0][1]);
+          setTimeout(() => { if (!userPaused && !prefersReducedMotion) startAnimation(); }, 500);
+        }
+      }, 1500);
+      return;
+    }
+
+    moveMotoAlongPath(pathProgress, true);
+    rafId = requestAnimationFrame(animationFrame);
+  }
+
   function moveMotoAlongPath(progress, updateStage) {
     if (!motoMarker || !pathPoints.length) return;
     pathProgress = Math.max(0, Math.min(progress, pathPoints.length - 1));
@@ -236,15 +329,16 @@
       if (stage !== currentStage) {
         currentStage = stage;
         updatePreview(stage, true);
-        if (map && animating) {
-          map.panTo([pos.lat, pos.lng], { animate: true, duration: 0.8 });
-        }
+        if (map && animating) focusStage(stage, pos.lat, pos.lng);
       }
     }
+
+    if (map && animating) followMoto(pos.lat, pos.lng);
   }
 
   function moveMotoToStage(stage) {
     pathProgress = pathIndexForStage(stage);
+    motoRotationDeg = null;
     moveMotoAlongPath(pathProgress, false);
   }
 
@@ -256,10 +350,11 @@
     updateTraveledLine(pathProgress);
 
     if (map && fly) {
-      map.flyTo([routeStages[stage].lat, routeStages[stage].lng], 9, { duration: 1.2 });
+      const pos = getInterpolatedPosition(pathProgress);
+      focusStage(stage, pos.lat, pos.lng);
     }
 
-    setTimeout(() => { if (!userPaused) startAnimation(); }, fly ? 1500 : 500);
+    setTimeout(() => { if (!userPaused) startAnimation(true); }, fly ? 1500 : 500);
   }
 
   function stopAnimation(fromUser) {
@@ -273,8 +368,9 @@
     if (pauseBtn) pauseBtn.hidden = true;
   }
 
-  function startAnimation() {
-    if (animating) return;
+  function startAnimation(fromUser) {
+    if (animating || !mapReady) return;
+    if (prefersReducedMotion && fromUser !== true) return;
     userPaused = false;
     animating = true;
     lastFrameTime = 0;
@@ -283,27 +379,8 @@
     if (playBtn) playBtn.hidden = true;
     if (pauseBtn) pauseBtn.hidden = false;
 
-    function frame(timestamp) {
-      if (!animating) return;
-
-      if (!lastFrameTime) lastFrameTime = timestamp;
-      const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.05);
-      lastFrameTime = timestamp;
-
-      pathProgress += MOTO_SPEED * dt;
-
-      if (pathProgress >= pathPoints.length - 1) {
-        pathProgress = 0;
-        currentStage = 0;
-        updatePreview(0, true);
-        if (traveledLine) traveledLine.setLatLngs([]);
-      }
-
-      moveMotoAlongPath(pathProgress, true);
-      rafId = requestAnimationFrame(frame);
-    }
-
-    rafId = requestAnimationFrame(frame);
+    focusStage(currentStage, ...pathPoints[pathIndexForStage(currentStage)]);
+    rafId = requestAnimationFrame(animationFrame);
   }
 
   function buildTimeline() {
@@ -328,7 +405,7 @@
 
     buildTimeline();
 
-    const path = buildDensePath(routeStages, 50);
+    const path = buildDensePath(routeStages, 80);
     pathPoints = path.points;
     stagePathIndex = path.stagePathIndex;
 
@@ -336,12 +413,16 @@
 
     map.createPane('routePane');
     map.createPane('motoPane');
+    map.createPane('labelPane');
     map.getPane('routePane').style.zIndex = 450;
     map.getPane('motoPane').style.zIndex = 650;
+    map.getPane('labelPane').style.zIndex = 700;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',
-      maxZoom: 14
+    /* Fond sans libellés OSM — noms des villes ajoutés en français */
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
     }).addTo(map);
 
     /* Tracé de fond */
@@ -389,20 +470,51 @@
       return marker;
     });
 
+    /* Libellés des villes — français uniquement */
+    routeStages.forEach((s) => {
+      L.marker([s.lat, s.lng], {
+        icon: createCityLabel(s.name),
+        pane: 'labelPane',
+        interactive: false,
+        zIndexOffset: 2000
+      }).addTo(map);
+    });
+
     /* Moto animée — toujours au-dessus du tracé */
-    const startBearing = getBearing(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
+    const startAngle = getIconAngle(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
     motoMarker = L.marker(pathPoints[0], {
-      icon: createMotoIcon(startBearing),
+      icon: createMotoIcon(startAngle),
       pane: 'motoPane',
       zIndexOffset: 1000,
       interactive: false
     }).addTo(map);
 
-    map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48] });
+    map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48], animate: false });
+
+    const parcoursSection = document.getElementById('parcours');
+
+    map.whenReady(() => {
+      map.invalidateSize();
+      const pos = getInterpolatedPosition(pathProgress);
+      setMotoRotation(pos.bearing);
+      mapReady = true;
+      if (!prefersReducedMotion && !userPaused && parcoursSection?.getBoundingClientRect().top < window.innerHeight) {
+        startAnimation();
+      }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (prefersReducedMotion) return;
+        if (entry.isIntersecting && !userPaused && mapReady) startAnimation();
+        else if (!entry.isIntersecting) stopAnimation(false);
+      });
+    }, { threshold: 0.25 });
+    if (parcoursSection) observer.observe(parcoursSection);
 
     document.getElementById('journeyPlay')?.addEventListener('click', () => {
       userPaused = false;
-      startAnimation();
+      startAnimation(true);
     });
     document.getElementById('journeyPause')?.addEventListener('click', () => stopAnimation(true));
     document.getElementById('prevStage')?.addEventListener('click', () => {
@@ -416,20 +528,6 @@
     mapEl.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
 
     updatePreview(0, false);
-
-    /* Démarrage auto : la moto avance dès l'affichage de la carte */
-    const parcoursSection = document.getElementById('parcours');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !userPaused) startAnimation();
-        else if (!entry.isIntersecting) stopAnimation(false);
-      });
-    }, { threshold: 0.25 });
-    if (parcoursSection) observer.observe(parcoursSection);
-
-    setTimeout(() => {
-      if (!userPaused && !animating) startAnimation();
-    }, 800);
   }
 
   if (document.readyState === 'loading') {
@@ -459,8 +557,14 @@
   /* ── Gallery lightbox ── */
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
   const galleryItems = document.querySelectorAll('.gallery-item img');
   let currentIndex = 0;
+  let lastFocusedBeforeLightbox = null;
+
+  function getLightboxFocusables() {
+    return [lightboxClose, document.getElementById('lightboxPrev'), document.getElementById('lightboxNext')].filter(Boolean);
+  }
 
   galleryItems.forEach((img, i) => {
     img.addEventListener('click', () => openLightbox(i));
@@ -468,15 +572,22 @@
 
   function openLightbox(index) {
     currentIndex = index;
+    lastFocusedBeforeLightbox = document.activeElement;
     lightboxImg.src = galleryItems[index].src;
     lightboxImg.alt = galleryItems[index].alt;
     lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    lightboxClose?.focus();
   }
 
   function closeLightbox() {
     lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lastFocusedBeforeLightbox && typeof lastFocusedBeforeLightbox.focus === 'function') {
+      lastFocusedBeforeLightbox.focus();
+    }
   }
 
   function navigateLightbox(dir) {
@@ -485,11 +596,11 @@
     lightboxImg.alt = galleryItems[currentIndex].alt;
   }
 
-  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-  document.getElementById('lightboxPrev').addEventListener('click', () => navigateLightbox(-1));
-  document.getElementById('lightboxNext').addEventListener('click', () => navigateLightbox(1));
+  lightboxClose?.addEventListener('click', closeLightbox);
+  document.getElementById('lightboxPrev')?.addEventListener('click', () => navigateLightbox(-1));
+  document.getElementById('lightboxNext')?.addEventListener('click', () => navigateLightbox(1));
 
-  lightbox.addEventListener('click', (e) => {
+  lightbox?.addEventListener('click', (e) => {
     if (e.target === lightbox) closeLightbox();
   });
 
@@ -498,5 +609,45 @@
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') navigateLightbox(-1);
     if (e.key === 'ArrowRight') navigateLightbox(1);
+    if (e.key === 'Tab') {
+      const focusables = getLightboxFocusables();
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  /* ── Contact form ── */
+  const contactForm = document.getElementById('contactForm');
+  contactForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('contactName')?.value.trim();
+    const email = document.getElementById('contactEmail')?.value.trim();
+    const formula = document.getElementById('contactFormula')?.value;
+    const date = document.getElementById('contactDate')?.value;
+    const message = document.getElementById('contactMessage')?.value.trim();
+
+    if (!name || !email || !formula) {
+      contactForm.reportValidity();
+      return;
+    }
+
+    const body = [
+      `Nom : ${name}`,
+      `E-mail : ${email}`,
+      `Formule : ${formula}`,
+      date ? `Date souhaitée : ${date}` : '',
+      message ? `\nMessage :\n${message}` : ''
+    ].filter(Boolean).join('\n');
+
+    const subject = encodeURIComponent(`Réservation Raid Trail Algérie — ${formula}`);
+    window.location.href = `mailto:contact@raidtrail-algerie.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
 })();
