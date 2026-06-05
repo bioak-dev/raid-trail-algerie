@@ -11,7 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://raid-trail-algerie.vercel.app/">
   <meta property="og:title" content="Raid Trail Algérie — Skikda à Oran · 7 jours">
-  <meta property="og:description" content="1 200 km de trail en Algérie avec votre moto. Raid encadré, tous niveaux. Solo 1 990 € · Duo 2 490 € · départ dès 4 motos.">
+  <meta property="og:description" content="1 200 km de trail en Algérie avec votre moto. Une expérience immersive — de Skikda à Oran, sept jours entre ciel et pistes.">
   <meta property="og:image" content="https://raid-trail-algerie.vercel.app/images/hero.jpg">
   <meta property="og:locale" content="fr_FR">
   <meta name="twitter:card" content="summary_large_image">
@@ -30,6 +30,18 @@
 </head>
 <body>
 
+  <!-- Intro cinématique -->
+  <div class="intro-curtain" id="introCurtain" aria-hidden="false">
+    <div class="intro-grain" aria-hidden="true"></div>
+    <div class="intro-inner">
+      <p class="intro-eyebrow">Raid Trail Algérie</p>
+      <p class="intro-line">Fermez les yeux.</p>
+      <p class="intro-line">Écoutez le moteur au ralenti.</p>
+      <p class="intro-line intro-line-accent">La piste est là, devant vous.</p>
+      <button type="button" class="intro-enter btn btn-outline" id="introEnter">Entrer dans l'aventure</button>
+    </div>
+  </div>
+
   <!-- Navigation -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
@@ -38,6 +50,7 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
+        <li><a href="#reve">L'expérience</a></li>
         <li><a href="#parcours">Parcours</a></li>
         <li><a href="#securite">Encadrement</a></li>
         <li><a href="#pourquoi">Pourquoi</a></li>
@@ -52,19 +65,20 @@
 
   <!-- Hero -->
   <header class="hero" id="hero">
-    <div class="hero-bg">
-      <img src="images/hero.jpg" alt="Moto trail sur une piste en Algérie, montagnes et ciel ouvert" width="1920" height="1080" fetchpriority="high">
+    <div class="hero-bg" id="heroBg">
+      <img src="images/hero.jpg" alt="Moto trail sur une piste en Algérie, montagnes et ciel ouvert" width="1920" height="1080" fetchpriority="high" class="hero-bg-img">
       <div class="hero-overlay"></div>
+      <div class="hero-grain" aria-hidden="true"></div>
     </div>
     <div class="hero-content">
-      <span class="hero-badge">Skikda → Oran · 7j / 6n · 1 200 km · Tous niveaux</span>
-      <h1 class="hero-title">Une semaine de <em>trail</em> en Algérie</h1>
-      <p class="hero-desc">Gorges, cols du Djurdjura et littoral méditerranéen — 1 200 km d'itinéraire avec votre moto. Raid encadré, ouvert à tous les niveaux.</p>
-      <div class="hero-cta">
-        <a href="#contact" class="btn btn-primary">Réserver — dès 1 990 €</a>
-        <a href="#parcours" class="btn btn-outline">Voir le parcours</a>
+      <span class="hero-badge reveal">Skikda → Oran · 7j / 6n · 1 200 km</span>
+      <h1 class="hero-title reveal reveal-delay-1">1 200 km entre <em>ciel</em> et pistes</h1>
+      <p class="hero-desc reveal reveal-delay-2">Sept jours où le bruit du moteur remplace celui du quotidien. Gorges, cols du Djurdjura, Méditerranée — une Algérie rare, à vivre depuis votre selle.</p>
+      <div class="hero-cta reveal reveal-delay-3">
+        <a href="#reve" class="btn btn-primary">Vivre l'expérience</a>
+        <a href="#parcours" class="btn btn-outline">Explorer le parcours</a>
       </div>
-      <div class="hero-stats">
+      <div class="hero-stats reveal reveal-delay-4">
         <div class="hero-stat">
           <div class="hero-stat-value">1 990 €</div>
           <div class="hero-stat-label">Formule solo</div>
@@ -83,18 +97,73 @@
         </div>
       </div>
     </div>
-    <a href="#parcours" class="hero-scroll" aria-label="Défiler">
+    <a href="#reve" class="hero-scroll" aria-label="Défiler">
+      <span class="hero-scroll-text">Plongez</span>
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </a>
   </header>
 
+  <!-- Immersion — faire rêver -->
+  <section id="reve" class="dream-scroll" aria-label="Vivez l'expérience du raid">
+    <div class="dream-scroll-visual" aria-hidden="true">
+      <div class="dream-scroll-bg">
+        <img class="dream-bg is-active" src="images/gallery-03.jpg" alt="" width="1920" height="1080">
+        <img class="dream-bg" src="images/gallery-11.jpg" alt="" width="1920" height="1080" loading="lazy">
+        <img class="dream-bg" src="images/gallery-07.jpg" alt="" width="1920" height="1080" loading="lazy">
+        <img class="dream-bg" src="images/gallery-08.jpg" alt="" width="1920" height="1080" loading="lazy">
+        <img class="dream-bg" src="images/gallery-12.jpg" alt="" width="1920" height="1080" loading="lazy">
+      </div>
+      <div class="dream-scroll-overlay"></div>
+      <div class="dream-scroll-progress" id="dreamProgress" aria-hidden="true">
+        <span class="dream-scroll-progress-bar" id="dreamProgressBar"></span>
+      </div>
+    </div>
+
+    <div class="dream-scroll-steps">
+      <article class="dream-step is-active" data-dream="0">
+        <p class="dream-step-time">Avant l'aube</p>
+        <h2 class="dream-step-title">Le silence<br>avant le départ</h2>
+        <p class="dream-step-text">Un café chaud, la moto qui attend, la route encore invisible. Quelque part entre Skikda et l'horizon, l'aventure commence dans le ventre.</p>
+      </article>
+      <article class="dream-step" data-dream="1">
+        <p class="dream-step-time">Matin · Jour 1</p>
+        <h2 class="dream-step-title">La poussière<br>qui danse</h2>
+        <p class="dream-step-text">Première accélération sur la piste. Le soleil perce, la mer disparaît derrière vous. Vous n'êtes plus ailleurs — vous êtes <em>là</em>.</p>
+      </article>
+      <article class="dream-step" data-dream="2">
+        <p class="dream-step-time">Midi · Jour 3</p>
+        <h2 class="dream-step-title">Les gorges<br>en contre-plongée</h2>
+        <p class="dream-step-text">Roche rouge, falaises vertigineuses, le moteur qui résonne dans le canyon. Des paysages que peu de motards ont vus de l'intérieur.</p>
+      </article>
+      <article class="dream-step" data-dream="3">
+        <p class="dream-step-time">Nuit · Jour 5</p>
+        <h2 class="dream-step-title">Le ciel<br>comme toit</h2>
+        <p class="dream-step-text">Bivouac au Djurdjura. Étoiles à perte de vue, rires autour du feu, fatigue heureuse. Demain, encore 200 km de liberté.</p>
+      </article>
+      <article class="dream-step" data-dream="4">
+        <p class="dream-step-time">Crépuscule · Jour 7</p>
+        <h2 class="dream-step-title">Oran<br>au loin</h2>
+        <p class="dream-step-text">La baie apparaît. 1 200 km derrière vous, une histoire à raconter. Vous savez déjà que vous reviendrez.</p>
+        <a href="#contact" class="btn btn-primary dream-step-cta">Je veux vivre ça</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Bandeau rêve -->
+  <div class="dream-quote" aria-hidden="false">
+    <blockquote class="dream-quote-inner reveal">
+      <p>« Ce n'est pas une destination. C'est une semaine où le temps ralentit, où chaque virage ouvre un monde nouveau. »</p>
+      <cite>— L'esprit RaidAlg</cite>
+    </blockquote>
+  </div>
+
   <!-- Parcours -->
   <section id="parcours" class="section-bg-white">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <p class="section-label">Le parcours</p>
         <h2 class="section-title">De la côte à l'Atlas</h2>
-        <p class="section-subtitle">Cliquez sur une étape ou lancez le parcours — la moto vous guide à travers chaque paysage.</p>
+        <p class="section-subtitle">Lancez la moto sur la carte — chaque étape révèle le paysage que vous traverserez.</p>
       </div>
 
       <div class="journey-interactive">
@@ -138,7 +207,7 @@
   <!-- Encadrement & sérénité -->
   <section id="securite" class="security-section">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <p class="section-label">Partir serein</p>
         <h2 class="security-headline">
           <span class="security-headline-text">Rouler en moto en Algérie en toute confiance</span>
@@ -432,7 +501,7 @@
   <!-- Inspirations / Gallery -->
   <section id="inspirations" class="section-bg-sand">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <p class="section-label">Galerie</p>
         <h2 class="section-title">Sur la route</h2>
         <p class="section-subtitle">Paysages, pistes et instants vécus au fil des 1 200 km.</p>
@@ -461,7 +530,12 @@
   <!-- Contact -->
   <section id="contact" class="section-bg-white contact-section">
     <div class="container">
-      <div class="section-header">
+      <div class="dream-closer reveal">
+        <p class="dream-closer-label">Cette route existe</p>
+        <h2 class="dream-closer-title">Il ne reste qu'à<br>la prendre</h2>
+        <p class="dream-closer-text">Places limitées · Départs dès 4 motos · Réponse sous 48 h</p>
+      </div>
+      <div class="section-header reveal">
         <p class="section-label">Contact</p>
         <h2 class="section-title">Réserver votre place</h2>
         <p class="section-subtitle">Envoyez-nous votre demande — nous vous répondons sous 48 h avec les modalités et la date de votre choix.</p>
@@ -537,6 +611,7 @@
         <div>
           <h4>Navigation</h4>
           <ul class="footer-links">
+            <li><a href="#reve">L'expérience</a></li>
             <li><a href="#parcours">Parcours</a></li>
             <li><a href="#securite">Encadrement</a></li>
             <li><a href="#pourquoi">Pourquoi ce raid</a></li>
