@@ -62,12 +62,26 @@
     }
   ];
 
-  const MOTO_SVG = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="11" fill="rgba(184,92,56,0.2)" stroke="#B85C38" stroke-width="1"/>
-    <circle cx="5.5" cy="17.5" r="2.5" fill="#1A3A5C" stroke="#fff" stroke-width="1"/>
-    <circle cx="18.5" cy="17.5" r="2.5" fill="#1A3A5C" stroke="#fff" stroke-width="1"/>
-    <path d="M8 17h8M5.5 15l2.5-6h4l1.5 3h3l1 3" stroke="#B85C38" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M11 9l1-3h2l1 3" stroke="#B85C38" stroke-width="1.5" stroke-linecap="round"/>
+  /* Icône moto trail/adventure vue de profil — orientée vers la droite */
+  const MOTO_SVG = `<svg width="56" height="32" viewBox="0 0 112 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <ellipse cx="56" cy="58" rx="36" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+    <circle cx="24" cy="44" r="13" fill="#252525" stroke="#111" stroke-width="1.5"/>
+    <circle cx="24" cy="44" r="8.5" fill="#3a3a3a"/>
+    <circle cx="24" cy="44" r="2.5" fill="#666"/>
+    <circle cx="88" cy="44" r="13" fill="#252525" stroke="#111" stroke-width="1.5"/>
+    <circle cx="88" cy="44" r="8.5" fill="#3a3a3a"/>
+    <circle cx="88" cy="44" r="2.5" fill="#666"/>
+    <path d="M36 41 L24 44" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M76 39 L88 44" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M36 41 L48 30 L62 24 L74 26 L80 36 L76 39" stroke="#1A3A5C" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+    <path d="M50 28 L58 20 L70 18 L76 24 L68 26 L54 30 Z" fill="#1A3A5C"/>
+    <ellipse cx="60" cy="27" rx="11" ry="6.5" fill="#B85C38" stroke="#9A4A2E" stroke-width="1"/>
+    <path d="M76 24 L84 16 M76 24 L84 28" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M72 20 L76 10" stroke="#7a9ab8" stroke-width="1.5" stroke-linecap="round" opacity="0.75"/>
+    <rect x="42" y="32" width="13" height="9" rx="1.5" fill="#4a4a4a" stroke="#333"/>
+    <path d="M36 39 Q30 37 26 33" stroke="#999" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <circle cx="91" cy="31" r="3" fill="#fff8dc" stroke="#ccc" stroke-width="0.75"/>
+    <path d="M48 30 L44 26" stroke="#B85C38" stroke-width="2" stroke-linecap="round"/>
   </svg>`;
 
   const MOTO_SPEED = 12; /* points par seconde le long du tracé */
@@ -111,8 +125,8 @@
     return L.divIcon({
       className: 'moto-marker-wrap',
       html: `<div class="moto-marker-inner" style="transform:rotate(${bearing - 90}deg)">${MOTO_SVG}</div>`,
-      iconSize: [48, 48],
-      iconAnchor: [24, 24]
+      iconSize: [56, 32],
+      iconAnchor: [28, 16]
     });
   }
 
