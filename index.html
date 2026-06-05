@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Algeria Maxi-Trail Raid — 7 jours d'Oran à Skikda. Formule élite limitée à 5 motos. Ferry, hôtels 4★, guide expert et 4×4 d'assistance. Dès 1 990 €.">
-  <title>Algeria Maxi-Trail Raid — Oran à Skikda · 7 jours</title>
+  <meta name="description" content="Raid moto trail & adventure en Algérie — 7 jours de Skikda à Oran, moto perso dès 450 cc, tous niveaux. Solo 1 990 € · Duo 2 490 €.">
+  <title>Raid Trail Algérie — Skikda à Oran · 7 jours</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 
   <link rel="preload" as="image" href="images/hero.jpg">
 
@@ -17,22 +17,21 @@
 </head>
 <body>
 
+  <!-- Navigation -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="#" class="nav-logo">
-        Algeria Maxi-Trail
-        <small>Raid Premium</small>
-      </a>
+      <a href="#" class="nav-logo">Raid<span>Alg</span></a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#aventure">L'aventure</a></li>
-        <li><a href="#roadbook">Roadbook</a></li>
-        <li><a href="#services">Services</a></li>
+        <li><a href="#parcours">Parcours</a></li>
+        <li><a href="#pourquoi">Pourquoi</a></li>
         <li><a href="#tarifs">Tarifs</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#contact" class="btn btn-gold" style="padding:0.65rem 1.25rem;font-size:0.78rem">Réserver</a></li>
+        <li><a href="#motos">Motos</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#inspirations">Galerie</a></li>
+        <li><a href="#tarifs" class="btn btn-primary" style="padding:0.6rem 1.25rem;font-size:0.85rem">Réserver</a></li>
       </ul>
     </div>
   </nav>
@@ -40,332 +39,421 @@
   <!-- Hero -->
   <header class="hero" id="hero">
     <div class="hero-bg">
-      <img src="images/hero.jpg" alt="Groupe de maxi-trails sur une crête face à la Méditerranée" width="1920" height="1080" fetchpriority="high">
+      <img src="images/hero.jpg" alt="Moto trail sur une piste en Algérie, montagnes et ciel ouvert" width="1920" height="1080" fetchpriority="high">
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-content">
-      <p class="hero-brand">Algeria Maxi-Trail Raid</p>
-      <h1 class="hero-title">L'Aventure Authentique</h1>
-      <p class="hero-tagline">Entre mer, pistes et montagnes</p>
-      <p class="hero-intro">
-        Un tracé unique de 7 jours — d'Oran à Skikda.<br>
-        Formules élite limitées à <strong>5 motos maximum</strong> par départ.<br>
-        Conçu pour les passionnés de grands espaces, accessible en solo ou en duo.
-      </p>
-      <div class="hero-badges">
-        <span class="hero-badge-item">7 jours · 6 nuits</span>
-        <span class="hero-badge-item">Maxi-trail & adventure</span>
-        <span class="hero-badge-item">5 motos max.</span>
-        <span class="hero-badge-item">Ferry inclus</span>
-      </div>
+      <span class="hero-badge">Skikda → Oran · 7j / 6n · 1 200 km · Tous niveaux</span>
+      <h1 class="hero-title">Une semaine de <em>trail</em> en Algérie</h1>
+      <p class="hero-desc">Gorges, cols du Djurdjura et littoral méditerranéen — 1 200 km d'itinéraire avec votre moto. Raid encadré, ouvert à tous les niveaux.</p>
       <div class="hero-cta">
-        <a href="#contact" class="btn btn-gold">Réserver ma place</a>
-        <a href="#roadbook" class="btn btn-outline-light">Découvrir le roadbook</a>
+        <a href="#tarifs" class="btn btn-primary">Réserver — dès 1 990 €</a>
+        <a href="#parcours" class="btn btn-outline">Voir le parcours</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">1 990 €</div>
+          <div class="hero-stat-label">Formule solo</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">2 490 €</div>
+          <div class="hero-stat-label">Formule duo</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">1 200</div>
+          <div class="hero-stat-label">Kilomètres</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">4–6</div>
+          <div class="hero-stat-label">Motos min.</div>
+        </div>
       </div>
     </div>
-    <a href="#aventure" class="hero-scroll" aria-label="Défiler">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    <a href="#parcours" class="hero-scroll" aria-label="Défiler">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
     </a>
   </header>
 
-  <!-- Intro strip -->
-  <div class="intro-strip" id="aventure">
-    <div class="container intro-grid">
-      <div class="intro-item">
-        <div class="intro-item-value">7j</div>
-        <div class="intro-item-label">Oran → Skikda</div>
-      </div>
-      <div class="intro-item">
-        <div class="intro-item-value">5</div>
-        <div class="intro-item-label">Motos max. / départ</div>
-      </div>
-      <div class="intro-item">
-        <div class="intro-item-value">1 990 €</div>
-        <div class="intro-item-label">Pilote solo</div>
-      </div>
-      <div class="intro-item">
-        <div class="intro-item-value">+590 €</div>
-        <div class="intro-item-label">Supplément passager</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Roadbook -->
-  <section id="roadbook">
+  <!-- Parcours -->
+  <section id="parcours">
     <div class="container">
       <div class="section-header">
-        <p class="section-label">L'aventure étape par étape</p>
-        <h2 class="section-title">Le roadbook de votre raid</h2>
-        <p class="section-subtitle">Cinq étapes à travers la côte ouest, le Djurdjura et l'est algérien — de la Méditerranée aux gorges de Constantine.</p>
+        <p class="section-label">Le parcours</p>
+        <h2 class="section-title">De la côte à l'Atlas</h2>
+        <p class="section-subtitle">Cinq étapes entre mer et montagne, sur routes panoramiques et pistes soigneusement sélectionnées.</p>
       </div>
 
-      <div class="roadbook-bar" aria-label="Itinéraire du raid">
-        <span class="city">Oran</span>
-        <span class="arrow">➔</span>
-        <span>Mostaganem / Chlef</span>
-        <span class="arrow">➔</span>
-        <span class="city">Tikjda</span>
-        <span class="arrow">➔</span>
-        <span class="city">Béjaïa</span>
-        <span class="arrow">➔</span>
-        <span>Constantine / Skikda</span>
-      </div>
-
-      <div class="steps-list">
-        <article class="step-card" data-step="0">
-          <div class="step-num">01</div>
-          <div class="step-content">
-            <h3>Oran, la Radieuse</h3>
-            <p class="step-route">Étape 1 · Arrivée</p>
-            <div class="step-block">
-              <strong>Le décor</strong>
-              <p>Arrivée en ferry, passage des formalités douanières encadré par notre équipe. Briefing autour d'un thé face au Fort de Santa Cruz.</p>
+      <div class="route-grid">
+        <div id="map" role="img" aria-label="Carte du raid Skikda — Constantine — Kherrata — Djurdjura — Oran"></div>
+        <div class="route-stops">
+          <div class="route-stop active" data-lat="36.876" data-lng="6.909" data-index="0">
+            <span class="route-stop-num">01</span>
+            <div class="route-stop-info">
+              <h3>Skikda</h3>
+              <p>Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.</p>
+              <span class="route-stop-tag">Jour 1 · Départ</span>
             </div>
-            <div class="step-block">
-              <strong>L'esprit</strong>
-              <p>Prise en main, découverte des premières pistes roulantes côtières.</p>
-            </div>
-            <span class="step-nuit">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-              Nuit en hôtel 4★ à Oran
-            </span>
           </div>
-        </article>
-
-        <article class="step-card" data-step="1">
-          <div class="step-num">02</div>
-          <div class="step-content">
-            <h3>L'Échappée Littorale</h3>
-            <p class="step-route">Oran ➔ Mostaganem ➔ Chlef</p>
-            <div class="step-block">
-              <strong>Le décor</strong>
-              <p>Une journée de roulage rythmée entre routes côtières surplombant la Méditerranée et pistes de terre battue idéales pour le maxi-trail.</p>
+          <div class="route-stop" data-lat="36.365" data-lng="6.615" data-index="1">
+            <span class="route-stop-num">02</span>
+            <div class="route-stop-info">
+              <h3>Constantine</h3>
+              <p>La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.</p>
+              <span class="route-stop-tag">Jour 2 · Gorges</span>
             </div>
-            <div class="step-block">
-              <strong>L'esprit</strong>
-              <p>On s'éloigne de la côte pour s'enfoncer vers le cœur du Nord algérien.</p>
-            </div>
-            <span class="step-nuit">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-              Nuit en hôtel tout confort à Chlef
-            </span>
           </div>
-        </article>
-
-        <article class="step-card" data-step="2">
-          <div class="step-num">03</div>
-          <div class="step-content">
-            <h3>Le Grand Choc Visuel</h3>
-            <p class="step-route">Chlef ➔ Tikjda</p>
-            <div class="step-block">
-              <strong>Le décor</strong>
-              <p>Traversée des plaines avant d'attaquer les lacets spectaculaires du Parc National du Djurdjura. Vous roulez au milieu des forêts de cèdres millénaires.</p>
+          <div class="route-stop" data-lat="36.497" data-lng="5.283" data-index="2">
+            <span class="route-stop-num">03</span>
+            <div class="route-stop-info">
+              <h3>Kherrata</h3>
+              <p>Canyon aux parois rouges — passage étroit et paysages grandioses.</p>
+              <span class="route-stop-tag">Jour 3 · Canyon</span>
             </div>
-            <div class="step-block">
-              <strong>L'esprit</strong>
-              <p>Une étape de montagne pure, des panoramas alpins à couper le souffle à plus de 1 600 mètres d'altitude.</p>
-            </div>
-            <span class="step-nuit">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-              Nuit au cœur du parc national à Tikjda
-            </span>
           </div>
-        </article>
-
-        <article class="step-card" data-step="3">
-          <div class="step-num">04</div>
-          <div class="step-content">
-            <h3>La Descente vers la Mer</h3>
-            <p class="step-route">Tikjda ➔ Béjaïa</p>
-            <div class="step-block">
-              <strong>Le décor</strong>
-              <p>Descente technique et sinueuse à travers la Kabylie. Pistes forestières de crête et arrivée grandiose sur la côte de Béjaïa (Bougie).</p>
+          <div class="route-stop" data-lat="36.417" data-lng="4.167" data-index="3">
+            <span class="route-stop-num">04</span>
+            <div class="route-stop-info">
+              <h3>Djurdjura</h3>
+              <p>Massif à 2 000 m — cols, forêts de cèdres et vues à perte de vue.</p>
+              <span class="route-stop-tag">Jours 4–5 · Montagne</span>
             </div>
-            <div class="step-block">
-              <strong>L'esprit</strong>
-              <p>Un mix parfait entre le plaisir du pilotage technique et la douceur du climat marin.</p>
-            </div>
-            <span class="step-nuit">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-              Nuit en hôtel de charme face à la mer à Béjaïa
-            </span>
           </div>
-        </article>
-
-        <article class="step-card" data-step="4">
-          <div class="step-num">05</div>
-          <div class="step-content">
-            <h3>L'Apothéose des Ponts</h3>
-            <p class="step-route">Béjaïa ➔ Constantine ➔ Skikda</p>
-            <div class="step-block">
-              <strong>Le décor</strong>
-              <p>Route vers Constantine, la « Ville des Ponts Suspendus », cité millénaire perchée sur ses rochers. Session photo unique sur les ponts, puis liaison vers le port de Skikda.</p>
+          <div class="route-stop" data-lat="35.697" data-lng="-0.633" data-index="4">
+            <span class="route-stop-num">05</span>
+            <div class="route-stop-info">
+              <h3>Oran</h3>
+              <p>Arrivée sur la côte ouest — baie méditerranéenne et dernière étape conviviale.</p>
+              <span class="route-stop-tag">Jour 7 · Arrivée</span>
             </div>
-            <div class="step-block">
-              <strong>L'esprit</strong>
-              <p>Histoire, culture et fin de parcours en beauté avant l'embarquement sur le ferry de retour.</p>
-            </div>
-            <span class="step-nuit">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22V8M5 12H2a10 10 0 0020 0h-3M12 2v2"/></svg>
-              Embarquement ferry · Skikda
-            </span>
           </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Map -->
-  <div class="map-section">
-    <div class="container">
-      <div id="map" role="img" aria-label="Carte du raid Oran à Skikda"></div>
-    </div>
-  </div>
-
-  <!-- Services -->
-  <section id="services" class="dark">
-    <div class="container">
-      <div class="section-header">
-        <p class="section-label">Logistique premium</p>
-        <h2 class="section-title section-title-light">Zéro stress, tout inclus</h2>
-        <p class="section-subtitle section-subtitle-light">Une organisation professionnelle pour que vous ne pensiez qu'à une chose : rouler.</p>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M8 17h8M5.5 15l2-5h5l2 5"/></svg>
-          </div>
-          <h3>Encadrement professionnel</h3>
-          <p>Un guide local expert ouvre la route à moto. Il maîtrise le tracé, les codes locaux et assure un passage fluide aux points de contrôle.</p>
         </div>
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="22" height="12" rx="2"/><path d="M1 10h22M6 16h2M16 16h2"/></svg>
-          </div>
-          <h3>Assistance logistique totale</h3>
-          <p>Un véhicule 4×4 ferme la marche. Il transporte vos bagages, l'outillage mécanique complet, les pièces de rechange et le matériel médical de premier secours.</p>
+      </div>
+
+      <div class="route-highlights">
+        <div class="highlight-card">
+          <img src="images/route-skikda.jpg" alt="Côte de Skikda, pins et falaises sur la Méditerranée" loading="lazy" width="400" height="300">
+          <div class="highlight-card-overlay"><h4>Skikda — Littoral est</h4></div>
         </div>
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h6"/></svg>
-          </div>
-          <h3>Formalités & visas clé en main</h3>
-          <p>Notre structure officielle en Algérie émet votre attestation de prise en charge logistique. Notre agence partenaire en France gère l'obtention de votre visa à domicile — aucun déplacement au consulat requis.</p>
+        <div class="highlight-card">
+          <img src="images/route-constantine.jpg" alt="Ponts suspendus et gorges de Constantine" loading="lazy" width="400" height="300">
+          <div class="highlight-card-overlay"><h4>Constantine — Gorges du Rhumel</h4></div>
+        </div>
+        <div class="highlight-card">
+          <img src="images/route-kherrata.jpg" alt="Gorges de Kherrata, canyon de roche rouge" loading="lazy" width="400" height="300">
+          <div class="highlight-card-overlay"><h4>Kherrata — Canyon rouge</h4></div>
+        </div>
+        <div class="highlight-card">
+          <img src="images/route-djurdjura.jpg" alt="Sommets enneigés du Djurdjura" loading="lazy" width="400" height="300">
+          <div class="highlight-card-overlay"><h4>Djurdjura — Hauts sommets</h4></div>
+        </div>
+        <div class="highlight-card">
+          <img src="images/route-oran.jpg" alt="Front de mer et baie d'Oran au coucher du soleil" loading="lazy" width="400" height="300">
+          <div class="highlight-card-overlay"><h4>Oran — Côte ouest</h4></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Tarifs -->
-  <section id="tarifs" class="pricing-section">
+  <!-- Pourquoi l'Algérie -->
+  <section id="pourquoi">
     <div class="container">
       <div class="section-header">
-        <p class="section-label">Tarifs</p>
-        <h2 class="section-title">Nos formules tout inclus</h2>
-        <p class="section-subtitle">Moto trail ou adventure personnelle · minimum 450 cc · 5 places maximum par session</p>
+        <p class="section-label">Pourquoi ce raid</p>
+        <h2 class="section-title">L'aventure, sans compromis</h2>
+        <p class="section-subtitle">Un itinéraire exclusif, un encadrement professionnel et des tarifs pensés pour les motards solo, en couple ou entre amis.</p>
       </div>
 
-      <div class="pricing-layout">
-        <div class="pricing-main">
-          <h3>Tarification</h3>
-          <div class="price-row">
-            <span class="price-label">Tarif pilote (solo, votre moto)</span>
-            <span class="price-value">1 990 €</span>
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="4"/></svg>
           </div>
-          <div class="price-row">
-            <span class="price-label">Supplément passager (duo)</span>
-            <span class="price-value">+590 €</span>
-          </div>
-          <div class="price-total">
-            <span>Formule duo · couple</span>
-            <span>2 580 €</span>
-          </div>
-          <a href="#contact" class="btn btn-gold" style="width:100%">Je réserve</a>
+          <h3>1 990 € en solo</h3>
+          <p>7 jours / 6 nuits tout inclus avec votre moto. Hébergement, repas, guides et assistance — l'essentiel, sans surprise.</p>
         </div>
+        <div class="value-card value-card-highlight">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v-2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <h3>2 490 € à deux</h3>
+          <p>Pilote et passager sur une moto : 1 990 € + 500 €. Soit 1 245 € par personne pour vivre l'aventure ensemble.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>Itinéraire inédit</h3>
+          <p>1 200 km à travers l'est et l'ouest algérien — gorges, montagnes et Méditerranée sur un parcours rarement emprunté.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M8 17h8M5.5 15l2-5h5l2 5"/></svg>
+          </div>
+          <h3>Départ garanti dès 4 motos</h3>
+          <p>Formez votre groupe — à 2, 4 ou plus. Dès 4 motos inscrites, le raid est confirmé.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="pricing-includes">
-          <h4>Ce qui est inclus</h4>
-          <ul>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Billet de ferry aller-retour (cabine incluse)
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Tous les hébergements en hôtels 3★ et 4★ (base chambre double)
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Petits-déjeuners et dîners
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Encadrement par le guide local expert
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Véhicule d'assistance 4×4 (bagages, mécanique, secours)
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Démarches d'invitation et visa à domicile
-            </li>
-            <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-              Formalités douanières encadrées à l'arrivée
-            </li>
+  <!-- Tarifs & Dates -->
+  <section id="tarifs">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Tarifs & dates</p>
+        <h2 class="section-title">Deux formules, moto perso</h2>
+        <p class="section-subtitle">Trail ou adventure · minimum 450 cc · départs garantis dès 4 motos inscrites</p>
+      </div>
+
+      <div class="pricing-cards">
+        <div class="pricing-card featured">
+          <h3>Solo</h3>
+          <p style="color:var(--gray);font-size:0.9rem">7j / 6n · 1 pilote · votre moto</p>
+          <div class="pricing-price">1 990 € <small>pilote</small></div>
+          <ul class="pricing-includes">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Moto trail ou adventure (min. 450 cc)</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>6 nuits · hébergement confort</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Pension complète</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Guides locaux + véhicule 4×4</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Assurance rapatriement</li>
           </ul>
-          <div class="pricing-note">
-            Acompte de 30 % à la réservation · Solde 30 jours avant le départ · Session confirmée dès 4 motos inscrites · Places limitées à 5 motos
+          <a href="mailto:contact@raidtrail-algerie.com?subject=Réservation Solo — 1 990 €" class="btn btn-primary" style="width:100%">Je réserve</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Duo</h3>
+          <p style="color:var(--gray);font-size:0.9rem">7j / 6n · 1 pilote + 1 passager · 1 moto</p>
+          <div class="pricing-price">2 490 € <small>couple</small></div>
+          <p class="pricing-detail">1 990 € pilote + 500 € passager · 1 245 € / pers.</p>
+          <ul class="pricing-includes">
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Prestations identiques au solo</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Passager à bord (+500 €)</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Chambre double</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Aide aux formalités d'import</li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Transport maritime sur demande</li>
+          </ul>
+          <a href="mailto:contact@raidtrail-algerie.com?subject=Réservation Duo — 2 490 €" class="btn btn-primary" style="width:100%">Je réserve</a>
+        </div>
+      </div>
+
+      <p style="text-align:center;color:var(--gray);font-size:0.9rem;margin-top:1.5rem">Groupes de 2, 4 motos ou plus bienvenus · Acompte 30 % à l'inscription</p>
+
+      <table class="dates-table">
+        <thead>
+          <tr>
+            <th>Départ</th>
+            <th>Places</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>12 avril 2026</td>
+            <td>4 / 12</td>
+            <td><span class="status status-limited">Presque complet</span></td>
+          </tr>
+          <tr>
+            <td>3 mai 2026</td>
+            <td>8 / 12</td>
+            <td><span class="status status-open">Ouvert</span></td>
+          </tr>
+          <tr>
+            <td>14 juin 2026</td>
+            <td>10 / 12</td>
+            <td><span class="status status-open">Ouvert</span></td>
+          </tr>
+          <tr>
+            <td>5 septembre 2026</td>
+            <td>12 / 12</td>
+            <td><span class="status status-open">Ouvert</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pricing-cta">
+        <p style="color:var(--gray);margin-bottom:1rem;font-size:0.95rem">Acompte de 30 % à la réservation · Solde 30 jours avant le départ · Raid confirmé dès 4 motos</p>
+        <a href="mailto:contact@raidtrail-algerie.com?subject=Réservation Raid Trail Algérie" class="btn btn-primary">Je réserve ma place</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Motos & Assistance -->
+  <section id="motos">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Encadrement</p>
+        <h2 class="section-title">Votre moto, notre logistique</h2>
+        <p class="section-subtitle">Vous venez avec votre trail ou adventure — nous gérons le reste.</p>
+      </div>
+
+      <div class="motos-grid">
+        <div class="motos-features">
+          <div class="moto-feature">
+            <div class="moto-feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5.5" cy="17.5" r="2.5"/><circle cx="18.5" cy="17.5" r="2.5"/><path d="M8 17h8M5.5 15l2-5h5l2 5"/></svg>
+            </div>
+            <div>
+              <h3>Trail & adventure · 450 cc min.</h3>
+              <p>Seules les motos trail et adventure sont acceptées, homologuées route, à partir de 450 cc. Nous vous aidons pour le ferry depuis Marseille et l'import temporaire.</p>
+            </div>
+          </div>
+          <div class="moto-feature">
+            <div class="moto-feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v-2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div>
+              <h3>Guides locaux</h3>
+              <p>Deux guides expérimentés, connaisseurs du terrain. Briefing chaque matin, GPS partagé et rythme adapté à chaque niveau.</p>
+            </div>
+          </div>
+          <div class="moto-feature">
+            <div class="moto-feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><path d="M1 10h22M6 16h2M16 16h2"/></svg>
+            </div>
+            <div>
+              <h3>Véhicule 4×4 d'assistance</h3>
+              <p>Mécanicien, pièces de rechange, ravitaillement et transport des bagages. Vous roulez allégé, l'esprit libre.</p>
+            </div>
+          </div>
+        </div>
+        <div class="motos-photos">
+          <img src="images/moto-action-1.jpg" alt="Moto trail sur une piste de montagne en Algérie" loading="lazy" width="600" height="338">
+          <img src="images/moto-action-2.jpg" alt="Groupe de motards sur un col panoramique" loading="lazy" width="300" height="225">
+          <img src="images/moto-support.jpg" alt="Véhicule 4×4 d'assistance sur une piste" loading="lazy" width="300" height="225">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">Avant de partir</h2>
+        <p class="section-subtitle">Les réponses aux questions les plus fréquentes.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Quel niveau faut-il pour participer ?
+            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Le raid est ouvert à tous les niveaux. Permis A ou A2 requis. Les débutants roulent à leur rythme avec un encadrement renforcé ; les pilotes confirmés profitent des sections les plus sportives. Briefing sécurité chaque matin.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Quelle moto puis-je emmener ?
+            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Trail ou adventure uniquement, 450 cc minimum, homologuée route. Roadster, custom et autres catégories ne sont pas acceptés. Nous vous accompagnons pour le transport maritime et les formalités d'import temporaire.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Comment se passe l'hébergement ?
+            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Hôtels confortables en ville, gîte de montagne au Djurdjura et une nuit en bivouac organisé. Chambres en double (single possible, supplément). Pension complète incluse.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Quelles formalités pour l'Algérie ?
+            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Passeport valide 6 mois, visa touristique (nous fournissons la lettre d'invitation), permis moto + permis international. Nous vous guidons pas à pas dans toutes les démarches.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Comment la sécurité est-elle assurée ?
+            <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="faq-answer">
+            <p>Tracker GPS, radio VHF, trousse de secours et mécanicien à bord du 4×4. Assurance rapatriement incluse. Itinéraire validé par les autorités. Maximum 6 motards par guide.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact">
-    <div class="container contact-grid">
-      <div class="contact-photo">
-        <img src="images/moto-support.jpg" alt="L'équipe d'assistance au pied du véhicule 4×4" loading="lazy" width="600" height="750">
-        <div class="contact-photo-caption">Notre équipe · Assistance & encadrement</div>
+  <!-- Inspirations / Gallery -->
+  <section id="inspirations">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Galerie</p>
+        <h2 class="section-title">Sur la route</h2>
+        <p class="section-subtitle">Paysages, pistes et instants vécus au fil des 1 200 km.</p>
       </div>
-      <div class="contact-content">
-        <p class="section-label" style="text-align:left">Contact & réservation</p>
-        <h2>Prêt à rouler sur une terre de contrastes ?</h2>
-        <p>Les places sont limitées à <strong>5 motos par session</strong> pour garantir une sécurité maximale et une immersion authentique. Contactez-nous pour réserver votre place ou obtenir le programme détaillé.</p>
-        <ul class="contact-details">
-          <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            <a href="tel:+33612345678">+33 6 12 34 56 78</a>
-          </li>
-          <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <a href="mailto:contact@raidtrail-algerie.com">contact@raidtrail-algerie.com</a>
-          </li>
-          <li>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-            <a href="https://raid-trail-algerie.vercel.app" target="_blank" rel="noopener">raid-trail-algerie.vercel.app</a>
-          </li>
-        </ul>
-        <a href="mailto:contact@raidtrail-algerie.com?subject=Réservation Algeria Maxi-Trail Raid" class="btn btn-gold">Demander une réservation</a>
-        <p class="contact-partners">
-          Organisé par <strong>RaidAlg SAS</strong> (France) en partenariat avec <strong>Maxi-Trail Algérie SARL</strong> (Algérie).
-        </p>
+
+      <div class="gallery-grid" id="gallery">
+        <div class="gallery-item"><img src="images/gallery-01.jpg" alt="Route de montagne serpentant en Algérie" loading="lazy" width="400" height="300"></div>
+        <div class="gallery-item"><img src="images/gallery-02.jpg" alt="Village de montagne aux toits de pierre" loading="lazy" width="400" height="500"></div>
+        <div class="gallery-item"><img src="images/gallery-03.jpg" alt="Dunes dorées au lever du soleil" loading="lazy" width="400" height="350"></div>
+        <div class="gallery-item"><img src="images/gallery-04.jpg" alt="Oliveraie et chemin de terre" loading="lazy" width="400" height="280"></div>
+        <div class="gallery-item"><img src="images/gallery-05.jpg" alt="Plateau vaste et ciel ouvert" loading="lazy" width="400" height="320"></div>
+        <div class="gallery-item"><img src="images/gallery-06.jpg" alt="Kasbah ancienne sur les hauteurs" loading="lazy" width="400" height="450"></div>
+        <div class="gallery-item"><img src="images/gallery-07.jpg" alt="Col de montagne dans la brume" loading="lazy" width="400" height="300"></div>
+        <div class="gallery-item"><img src="images/gallery-08.jpg" alt="Bivouac sous un ciel étoilé" loading="lazy" width="400" height="380"></div>
+        <div class="gallery-item"><img src="images/gallery-09.jpg" alt="Falaises côtières près de Skikda" loading="lazy" width="400" height="290"></div>
+        <div class="gallery-item"><img src="images/gallery-10.jpg" alt="Ruines antiques en lumière dorée" loading="lazy" width="400" height="340"></div>
+        <div class="gallery-item"><img src="images/gallery-11.jpg" alt="Moto traversant un gué de montagne" loading="lazy" width="400" height="360"></div>
+        <div class="gallery-item"><img src="images/gallery-12.jpg" alt="Port d'Oran au crépuscule" loading="lazy" width="400" height="310"></div>
+        <div class="gallery-item"><img src="images/gallery-13.jpg" alt="Forêt de cèdres du Djurdjura" loading="lazy" width="400" height="400"></div>
+        <div class="gallery-item"><img src="images/gallery-14.jpg" alt="Ruelle animée d'un souk algérien" loading="lazy" width="400" height="330"></div>
+        <div class="gallery-item"><img src="images/gallery-15.jpg" alt="Silhouette de moto face au coucher de soleil" loading="lazy" width="400" height="370"></div>
       </div>
     </div>
   </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="Galerie photo">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Fermer">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Précédent">&#8249;</button>
+    <img src="" alt="" id="lightboxImg">
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Suivant">&#8250;</button>
+  </div>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">Algeria <span>Maxi-Trail</span> Raid</div>
-      <span>&copy; 2026 RaidAlg SAS · Tous droits réservés</span>
-      <div class="footer-legal">
-        <a href="#">Mentions légales</a>
-        <a href="#">CGV</a>
-        <a href="#">Confidentialité</a>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">Raid<span>Alg</span></div>
+          <p class="footer-desc">Raid moto trail & adventure en Algérie. 7 jours de Skikda à Oran avec votre moto — tous niveaux, dès 1 990 €.</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li><a href="mailto:contact@raidtrail-algerie.com">contact@raidtrail-algerie.com</a></li>
+            <li><a href="tel:+33612345678">+33 6 12 34 56 78</a></li>
+            <li>Paris · Alger</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#parcours">Parcours</a></li>
+            <li><a href="#pourquoi">Pourquoi ce raid</a></li>
+            <li><a href="#tarifs">Tarifs & dates</a></li>
+            <li><a href="#motos">Encadrement</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 Raid Trail Algérie. Tous droits réservés.</span>
+        <div class="footer-legal">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGV</a>
+        </div>
       </div>
     </div>
   </footer>
