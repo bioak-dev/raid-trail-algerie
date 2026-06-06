@@ -35,7 +35,7 @@ const RAID_TRIPS = [
     motoType: 'Trail ou adventure',
     bookingSubject: 'Raid Nord & Kabylie',
     mapSection: '#parcours',
-    mapTitle: 'De la côte à l\'Atlas',
+    mapTitle: 'Nord & Kabylie',
     mapSubtitle: 'Skikda, gorges de Constantine, Djurdjura — 1 200 km jusqu\'à Oran.',
     mapDefaultView: { lat: 36.3, lng: 4.5, zoom: 7 },
     routeStages: [

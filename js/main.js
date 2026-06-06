@@ -148,7 +148,7 @@
   const MOTO_SPEED = 10; /* points par seconde le long du tracé */
   const STAGE_ZOOM = 9;
   const FOLLOW_MARGIN = 0.28; /* marge écran avant recentrage */
-  const MOTO_ICON_HEADING_OFFSET = 90; /* icône Ténéré profil gauche : 0° CSS = ouest */
+  const MOTO_ICON_HEADING_OFFSET = -90; /* icône retournée (CSS) : 0° = est, cap = bearing - 90 */
 
   let map, motoMarker, traveledLine, backgroundLine, pathPoints = [], stagePathIndex = [];
   let segmentLines = [];
@@ -289,6 +289,7 @@
 
     map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48], animate: false });
     map.invalidateSize();
+    refreshMotoRotationFromPath();
     buildTimeline();
     updatePreview(0, false);
     updateTraveledLine(0);
@@ -358,10 +359,14 @@
     return getScreenBearing(lat1, lng1, lat2, lng2) + MOTO_ICON_HEADING_OFFSET;
   }
 
+  function motoTransformStyle(rotationDeg) {
+    return `rotate(${rotationDeg}deg) scaleX(-1)`;
+  }
+
   function createMotoIcon(rotationDeg) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div class="moto-marker-inner" style="transform:rotate(${rotationDeg}deg)"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
+      html: `<div class="moto-marker-inner" style="transform:${motoTransformStyle(rotationDeg)}"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
       iconSize: [MOTO_ICON_W, MOTO_ICON_H],
       iconAnchor: [MOTO_ICON_W / 2, MOTO_ICON_H / 2]
     });
@@ -379,7 +384,7 @@
       if (diff < -180) diff += 360;
       motoRotationDeg += diff * 0.35;
     }
-    el.style.transform = `rotate(${motoRotationDeg}deg)`;
+    el.style.transform = motoTransformStyle(motoRotationDeg);
   }
 
   function refreshMotoRotationFromPath() {
