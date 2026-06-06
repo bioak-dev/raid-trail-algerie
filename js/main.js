@@ -746,16 +746,19 @@
     e.preventDefault();
     const name = document.getElementById('contactName')?.value.trim();
     const email = document.getElementById('contactEmail')?.value.trim();
+    const tripId = document.getElementById('contactTrip')?.value;
     const formula = document.getElementById('contactFormula')?.value;
     const date = document.getElementById('contactDate')?.value;
     const message = document.getElementById('contactMessage')?.value.trim();
+    const trip = window.RAID_TRIPS?.find(t => t.id === tripId);
 
-    if (!name || !email || !formula) {
+    if (!name || !email || !formula || !tripId) {
       contactForm.reportValidity();
       return;
     }
 
     const body = [
+      `Raid : ${trip?.title || tripId}`,
       `Nom : ${name}`,
       `E-mail : ${email}`,
       `Formule : ${formula}`,
@@ -763,7 +766,8 @@
       message ? `\nMessage :\n${message}` : ''
     ].filter(Boolean).join('\n');
 
-    const subject = encodeURIComponent(`Réservation Raid Trail Algérie — ${formula}`);
+    const subjectLabel = trip?.bookingSubject || trip?.title || 'Raid Trail Algérie';
+    const subject = encodeURIComponent(`Réservation ${subjectLabel} — ${formula}`);
     window.location.href = `mailto:contact@raidtrail-algerie.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
 })();

@@ -826,6 +826,248 @@ section { padding: 6rem 0; }
 
 /* duplicate #map removed above */
 
+/* ── Roadtrip catalog ── */
+.roadtrip-filters,
+.trip-pricing-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 2.5rem;
+}
+
+.roadtrip-filter,
+.trip-pricing-tab {
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.15rem;
+  border: 2px solid var(--sand-dark);
+  border-radius: 50px;
+  background: var(--white);
+  color: var(--blue-deep);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.roadtrip-filter:hover,
+.trip-pricing-tab:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+}
+
+.roadtrip-filter.is-active,
+.trip-pricing-tab.is-active {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: var(--white);
+}
+
+.roadtrip-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .roadtrip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.roadtrip-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.roadtrip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(26, 58, 92, 0.14);
+}
+
+.roadtrip-card--featured {
+  border-color: var(--terra);
+}
+
+.roadtrip-card-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.roadtrip-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.roadtrip-card:hover .roadtrip-card-media img {
+  transform: scale(1.04);
+}
+
+.roadtrip-card-tag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-family: var(--font-title);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(26, 58, 92, 0.88);
+  color: var(--sand);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.roadtrip-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.roadtrip-card-title {
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.45rem;
+  text-transform: uppercase;
+  color: var(--blue-deep);
+  line-height: 1.15;
+}
+
+.roadtrip-card-subtitle {
+  font-size: 0.92rem;
+  color: var(--terra);
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.roadtrip-card-meta {
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+.roadtrip-card-meta strong {
+  color: var(--blue-deep);
+  font-weight: 600;
+}
+
+.roadtrip-card-desc {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--gray);
+}
+
+.roadtrip-card-highlights {
+  list-style: none;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.roadtrip-card-highlights li {
+  font-size: 0.85rem;
+  color: var(--blue-deep);
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.roadtrip-card-highlights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--terra);
+}
+
+.roadtrip-card-pricing {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--sand-dark);
+}
+
+.roadtrip-card-price {
+  display: block;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--terra);
+  line-height: 1;
+}
+
+.roadtrip-card-price-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--gray);
+  margin-top: 0.25rem;
+}
+
+.roadtrip-card-status {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.65rem;
+  border-radius: 50px;
+  text-align: right;
+  max-width: 160px;
+  line-height: 1.35;
+}
+
+.roadtrip-card-status--open { background: #D1FAE5; color: #065F46; }
+.roadtrip-card-status--limited { background: #FEF3C7; color: #92400E; }
+.roadtrip-card-status--full { background: #FEE2E2; color: #991B1B; }
+
+.roadtrip-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: auto;
+}
+
+.roadtrip-card-btn-secondary {
+  color: var(--blue-deep);
+  border: 2px solid var(--sand-dark);
+  background: transparent;
+}
+
+.roadtrip-card-btn-secondary:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+  background: var(--sand);
+}
+
+.trip-pricing-route {
+  text-align: center;
+  color: var(--gray);
+  font-size: 0.92rem;
+  margin-bottom: 2rem;
+}
+
+.pricing-cards--catalog {
+  max-width: 800px;
+}
+
 /* ── Pricing ── */
 .pricing-cards {
   display: grid;
@@ -1625,6 +1867,7 @@ section { padding: 6rem 0; }
 
   .btn-primary:hover,
   .btn:hover,
+  .roadtrip-card:hover,
   .value-card:hover,
   .security-card:hover,
   .gallery-item:hover img {

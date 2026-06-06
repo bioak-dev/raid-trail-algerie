@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Raid moto trail & adventure en Algérie — 7 jours de Skikda à Oran, moto perso dès 450 cc, tous niveaux. Solo 1 990 € · Duo 2 490 €.">
-  <title>Raid Trail Algérie — Skikda à Oran · 7 jours</title>
+  <meta name="description" content="Raids moto en Algérie — Nord & Kabylie (Skikda → Oran) et Portes du Sahara (Ghardaïa, El Oued). Maxi-trail et trail, dès 4 motos.">
+  <title>Raid Trail Algérie — Nos raids moto</title>
 
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://raid-trail-algerie.vercel.app/">
@@ -50,6 +50,7 @@
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="navLinks">
+        <li><a href="#roadtrips">Nos raids</a></li>
         <li><a href="#reve">L'expérience</a></li>
         <li><a href="#parcours">Parcours</a></li>
         <li><a href="#securite">Encadrement</a></li>
@@ -157,13 +158,26 @@
     </blockquote>
   </div>
 
+  <!-- Catalog roadtrips -->
+  <section id="roadtrips" class="section-bg-white">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-label">Nos raids</p>
+        <h2 class="section-title">Choisissez votre route</h2>
+        <p class="section-subtitle">De la Kabylie au Sahara — deux aventures, le même encadrement premium et votre moto perso.</p>
+      </div>
+      <div class="roadtrip-filters" id="roadtripFilters" role="tablist" aria-label="Filtrer par région"></div>
+      <div class="roadtrip-grid" id="roadtripGrid"></div>
+    </div>
+  </section>
+
   <!-- Parcours -->
   <section id="parcours" class="section-bg-white">
     <div class="container">
       <div class="section-header reveal">
         <p class="section-label">Le parcours</p>
         <h2 class="section-title">De la côte à l'Atlas</h2>
-        <p class="section-subtitle">Lancez la moto sur la carte — chaque étape révèle le paysage que vous traverserez.</p>
+        <p class="section-subtitle">Raid Nord & Kabylie — lancez la moto sur la carte, chaque étape révèle le paysage que vous traverserez.</p>
       </div>
 
       <div class="journey-interactive">
@@ -314,80 +328,14 @@
   <!-- Tarifs & Dates -->
   <section id="tarifs" class="section-bg-white">
     <div class="container">
-      <div class="section-header">
+      <div class="section-header reveal">
         <p class="section-label">Tarifs & dates</p>
         <h2 class="section-title">Deux formules, moto perso</h2>
-        <p class="section-subtitle">Trail ou adventure · minimum 450 cc · départs garantis dès 4 motos inscrites</p>
+        <p class="section-subtitle">Sélectionnez votre raid pour voir les tarifs et dates de départ.</p>
       </div>
 
-      <div class="pricing-cards">
-        <div class="pricing-card featured">
-          <h3>Solo</h3>
-          <p class="pricing-meta">7j / 6n · 1 pilote · votre moto</p>
-          <div class="pricing-price">1 990 € <small>pilote</small></div>
-          <ul class="pricing-includes">
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Moto trail ou adventure (min. 450 cc)</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>6 nuits · hébergement confort</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Pension complète</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Guides locaux + véhicule 4×4</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Assurance voyage incluse</li>
-          </ul>
-          <a href="#contact" class="btn btn-primary btn-full">Je réserve</a>
-        </div>
-        <div class="pricing-card">
-          <h3>Duo</h3>
-          <p class="pricing-meta">7j / 6n · 1 pilote + 1 passager · 1 moto</p>
-          <div class="pricing-price">2 490 € <small>couple</small></div>
-          <p class="pricing-detail">1 990 € pilote + 500 € passager · 1 245 € / pers.</p>
-          <ul class="pricing-includes">
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Prestations identiques au solo</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Passager à bord (+500 €)</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Chambre double</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Aide aux formalités d'import</li>
-            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Transport maritime sur demande</li>
-          </ul>
-          <a href="#contact" class="btn btn-primary btn-full">Je réserve</a>
-        </div>
-      </div>
-
-      <p class="text-muted-center">Groupes de 2, 4 motos ou plus bienvenus · Acompte 30 % à l'inscription</p>
-
-      <table class="dates-table">
-        <thead>
-          <tr>
-            <th>Départ</th>
-            <th>Places</th>
-            <th>Statut</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>12 avril 2026</td>
-            <td>4 / 12</td>
-            <td><span class="status status-limited">Presque complet</span></td>
-          </tr>
-          <tr>
-            <td>3 mai 2026</td>
-            <td>8 / 12</td>
-            <td><span class="status status-open">Ouvert</span></td>
-          </tr>
-          <tr>
-            <td>14 juin 2026</td>
-            <td>10 / 12</td>
-            <td><span class="status status-open">Ouvert</span></td>
-          </tr>
-          <tr>
-            <td>5 septembre 2026</td>
-            <td>12 / 12</td>
-            <td><span class="status status-full">Complet</span></td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="pricing-cta">
-        <p class="pricing-cta-note">Acompte de 30 % à la réservation · Solde 30 jours avant le départ · Raid confirmé dès 4 motos</p>
-        <a href="#contact" class="btn btn-primary">Je réserve ma place</a>
-      </div>
+      <div class="trip-pricing-tabs" id="tripPricingTabs" role="tablist" aria-label="Choisir un raid"></div>
+      <div id="tripPricingPanel"></div>
     </div>
   </section>
 
@@ -543,6 +491,10 @@
 
       <form class="contact-form" id="contactForm" novalidate>
         <div class="contact-grid">
+          <div class="form-group form-group-full">
+            <label for="contactTrip">Raid</label>
+            <select id="contactTrip" name="trip" required></select>
+          </div>
           <div class="form-group">
             <label for="contactName">Nom complet</label>
             <input type="text" id="contactName" name="name" required autocomplete="name" placeholder="Jean Dupont">
@@ -555,20 +507,12 @@
             <label for="contactFormula">Formule</label>
             <select id="contactFormula" name="formula" required>
               <option value="">Choisir…</option>
-              <option value="Solo — 1 990 €">Solo — 1 990 €</option>
-              <option value="Duo — 2 490 €">Duo — 2 490 €</option>
-              <option value="Je ne sais pas encore">Je ne sais pas encore</option>
             </select>
           </div>
           <div class="form-group">
             <label for="contactDate">Date souhaitée</label>
             <select id="contactDate" name="date">
               <option value="">Choisir…</option>
-              <option value="12 avril 2026">12 avril 2026</option>
-              <option value="3 mai 2026">3 mai 2026</option>
-              <option value="14 juin 2026">14 juin 2026</option>
-              <option value="5 septembre 2026 (complet)">5 septembre 2026 (complet)</option>
-              <option value="Autre date / groupe privé">Autre date / groupe privé</option>
             </select>
           </div>
           <div class="form-group form-group-full">
@@ -598,7 +542,7 @@
       <div class="footer-grid">
         <div>
           <div class="footer-brand">Raid<span>Alg</span></div>
-          <p class="footer-desc">Raid moto trail & adventure en Algérie. 7 jours de Skikda à Oran avec votre moto — tous niveaux, dès 1 990 €.</p>
+          <p class="footer-desc">Raids moto trail & maxi-trail en Algérie — Nord & Kabylie, Portes du Sahara. Votre moto, notre encadrement.</p>
         </div>
         <div>
           <h4>Contact</h4>
@@ -611,6 +555,7 @@
         <div>
           <h4>Navigation</h4>
           <ul class="footer-links">
+            <li><a href="#roadtrips">Nos raids</a></li>
             <li><a href="#reve">L'expérience</a></li>
             <li><a href="#parcours">Parcours</a></li>
             <li><a href="#securite">Encadrement</a></li>
@@ -633,6 +578,8 @@
     </div>
   </footer>
 
+  <script src="js/trips.js" defer></script>
+  <script src="js/catalog.js" defer></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <script src="js/main.js" defer></script>
 </body>
