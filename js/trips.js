@@ -7,21 +7,21 @@ const RAID_TRIPS = [
   {
     id: 'nord-kabylie',
     title: 'Raid Nord & Kabylie',
-    subtitle: 'De la Méditerranée aux sommets du Djurdjura',
+    subtitle: 'Boucle 1 200 km — départ & arrivée à Oran',
     duration: '7 Jours / 6 Nuits',
-    route: 'Skikda ➔ Constantine ➔ Djurdjura ➔ Oran',
+    route: 'Oran ➔ Djurdjura ➔ Kherrata ➔ Constantine ➔ Skikda ➔ Oran',
     difficulty: 'Tous niveaux (60 % asphalte, 40 % pistes)',
     basePrice: '1 990 €',
     basePriceNum: 1990,
     passengerSupplement: '+500 €',
     passengerSupplementNum: 500,
     duoPrice: '2 490 €',
-    description: '1 200 km entre côte est et baie d\'Oran — gorges, cols du Djurdjura et littoral méditerranéen. Un raid trail ouvert à tous les niveaux, encadré par des guides locaux.',
+    description: 'Boucle de 1 200 km au départ et retour Oran — Djurdjura, gorges de Kherrata, Constantine et la côte est avant de regagner la baie d\'Oran. Raid trail ouvert à tous les niveaux.',
     highlights: [
-      'Gorges de Kherrata',
+      'Départ & arrivée à Oran',
       'Massif du Djurdjura',
-      'Constantine & ses ponts',
-      'Assistance 4×4 incluse'
+      'Gorges de Kherrata & Constantine',
+      'Côte est puis retour par l\'ouest'
     ],
     status: 'Ouvert aux réservations — Printemps / Été',
     statusType: 'open',
@@ -36,49 +36,57 @@ const RAID_TRIPS = [
     bookingSubject: 'Raid Nord & Kabylie',
     mapSection: '#parcours',
     mapTitle: 'Nord & Kabylie',
-    mapSubtitle: 'Skikda, gorges de Constantine, Djurdjura — 1 200 km jusqu\'à Oran.',
-    mapDefaultView: { lat: 36.3, lng: 4.5, zoom: 7 },
+    mapSubtitle: 'Boucle depuis Oran — Djurdjura, Kherrata, Constantine, Skikda et retour.',
+    mapDefaultView: { lat: 36.2, lng: 3.2, zoom: 7 },
     motoLegConfig: null,
     routeStages: [
       {
-        lat: 36.876, lng: 6.909,
-        name: 'Skikda',
+        lat: 35.697, lng: -0.633,
+        name: 'Oran',
         tag: 'Jour 1 · Départ',
-        desc: 'Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.',
-        image: 'images/route-skikda.jpg',
-        imageAlt: 'Côte de Skikda, pins et falaises sur la Méditerranée'
-      },
-      {
-        lat: 36.365, lng: 6.615,
-        name: 'Constantine',
-        tag: 'Jour 2 · Gorges',
-        desc: 'La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.',
-        image: 'images/route-constantine.jpg',
-        imageAlt: 'Ponts suspendus et gorges de Constantine'
-      },
-      {
-        lat: 36.497, lng: 5.283,
-        name: 'Kherrata',
-        tag: 'Jour 3 · Canyon',
-        desc: 'Canyon aux parois rouges — passage étroit et paysages grandioses.',
-        image: 'images/route-kherrata.jpg',
-        imageAlt: 'Gorges de Kherrata, canyon de roche rouge'
+        desc: 'Départ depuis la baie d\'Oran — dernière pause café avant la Kabylie et les cols.',
+        image: 'images/route-oran.jpg',
+        imageAlt: 'Front de mer et baie d\'Oran au coucher du soleil'
       },
       {
         lat: 36.417, lng: 4.167,
         name: 'Djurdjura',
-        tag: 'Jours 4–5 · Montagne',
+        tag: 'Jours 2–3 · Montagne',
         desc: 'Massif à 2 000 m — cols, forêts de cèdres et vues à perte de vue.',
         image: 'images/route-djurdjura.jpg',
         imageAlt: 'Sommets enneigés du Djurdjura'
       },
       {
+        lat: 36.497, lng: 5.283,
+        name: 'Kherrata',
+        tag: 'Jour 4 · Canyon',
+        desc: 'Canyon aux parois rouges — passage étroit et paysages grandioses.',
+        image: 'images/route-kherrata.jpg',
+        imageAlt: 'Gorges de Kherrata, canyon de roche rouge'
+      },
+      {
+        lat: 36.365, lng: 6.615,
+        name: 'Constantine',
+        tag: 'Jour 5 · Gorges',
+        desc: 'La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.',
+        image: 'images/route-constantine.jpg',
+        imageAlt: 'Ponts suspendus et gorges de Constantine'
+      },
+      {
+        lat: 36.876, lng: 6.909,
+        name: 'Skikda',
+        tag: 'Jour 6 · Côte est',
+        desc: 'Littoral est — falaises, pins maritimes et pistes en bord de mer.',
+        image: 'images/route-skikda.jpg',
+        imageAlt: 'Côte de Skikda, pins et falaises sur la Méditerranée'
+      },
+      {
         lat: 35.697, lng: -0.633,
         name: 'Oran',
         tag: 'Jour 7 · Arrivée',
-        desc: 'Arrivée sur la côte ouest — baie méditerranéenne et dernière étape conviviale.',
+        desc: 'Retour sur la baie d\'Oran — boucle bouclée, dernière étape conviviale.',
         image: 'images/route-oran.jpg',
-        imageAlt: 'Front de mer et baie d\'Oran au coucher du soleil'
+        imageAlt: 'Port d\'Oran au crépuscule, fin de la boucle'
       }
     ],
     dates: [
