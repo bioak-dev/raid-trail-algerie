@@ -148,6 +148,7 @@
   const MOTO_SPEED = 10; /* points par seconde le long du tracé */
   const STAGE_ZOOM = 9;
   const FOLLOW_MARGIN = 0.28; /* marge écran avant recentrage */
+  const MOTO_ICON_HEADING_OFFSET = 90; /* icône Ténéré profil gauche : 0° CSS = ouest */
 
   let map, motoMarker, traveledLine, backgroundLine, pathPoints = [], stagePathIndex = [];
   let segmentLines = [];
@@ -278,15 +279,16 @@
       }).addTo(map);
     });
 
-    const startAngle = getIconAngle(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
+    const startRotation = getMotoRotationDeg(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
     motoMarker = L.marker(pathPoints[0], {
-      icon: createMotoIcon(startAngle),
+      icon: createMotoIcon(startRotation),
       pane: 'motoPane',
       zIndexOffset: 1000,
       interactive: false
     }).addTo(map);
 
     map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48], animate: false });
+    map.invalidateSize();
     buildTimeline();
     updatePreview(0, false);
     updateTraveledLine(0);
@@ -342,28 +344,34 @@
     return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
   }
 
-  function getIconAngle(lat1, lng1, lat2, lng2) {
-    return getBearing(lat1, lng1, lat2, lng2) - 90;
+  function getScreenBearing(lat1, lng1, lat2, lng2) {
+    if (!map) return getBearing(lat1, lng1, lat2, lng2);
+    const a = map.latLngToContainerPoint([lat1, lng1]);
+    const b = map.latLngToContainerPoint([lat2, lng2]);
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    if (Math.abs(dx) < 0.001 && Math.abs(dy) < 0.001) return 0;
+    return Math.atan2(dx, -dy) * 180 / Math.PI;
   }
 
-  function motoTransform(angle) {
-    return `rotate(${angle + 180}deg)`;
+  function getMotoRotationDeg(lat1, lng1, lat2, lng2) {
+    return getScreenBearing(lat1, lng1, lat2, lng2) + MOTO_ICON_HEADING_OFFSET;
   }
 
-  function createMotoIcon(angle) {
+  function createMotoIcon(rotationDeg) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div class="moto-marker-inner" style="transform:${motoTransform(angle)}"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
+      html: `<div class="moto-marker-inner" style="transform:rotate(${rotationDeg}deg)"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
       iconSize: [MOTO_ICON_W, MOTO_ICON_H],
       iconAnchor: [MOTO_ICON_W / 2, MOTO_ICON_H / 2]
     });
   }
 
-  function setMotoRotation(angle) {
+  function setMotoRotation(rotationDeg, immediate) {
     const el = motoMarker?.getElement()?.querySelector('.moto-marker-inner');
     if (!el) return;
-    const target = angle + 180;
-    if (motoRotationDeg === null) {
+    const target = rotationDeg;
+    if (motoRotationDeg === null || immediate) {
       motoRotationDeg = target;
     } else {
       let diff = target - motoRotationDeg;
@@ -372,6 +380,14 @@
       motoRotationDeg += diff * 0.35;
     }
     el.style.transform = `rotate(${motoRotationDeg}deg)`;
+  }
+
+  function refreshMotoRotationFromPath() {
+    if (!motoMarker || pathPoints.length < 2) return;
+    const idx = Math.min(Math.floor(pathProgress), pathPoints.length - 2);
+    const a = pathPoints[idx];
+    const b = pathPoints[idx + 1];
+    setMotoRotation(getMotoRotationDeg(a[0], a[1], b[0], b[1]), true);
   }
 
   function getInterpolatedPosition(progress) {
@@ -384,7 +400,7 @@
     return {
       lat: a[0] + (b[0] - a[0]) * frac,
       lng: a[1] + (b[1] - a[1]) * frac,
-      bearing: getIconAngle(a[0], a[1], b[0], b[1]),
+      rotation: getMotoRotationDeg(a[0], a[1], b[0], b[1]),
       idx
     };
   }
@@ -546,7 +562,7 @@
     const pos = getInterpolatedPosition(pathProgress);
 
     motoMarker.setLatLng([pos.lat, pos.lng]);
-    setMotoRotation(pos.bearing);
+    setMotoRotation(pos.rotation);
     updateTraveledLine(pathProgress);
 
     const progressBar = document.getElementById('journeyProgressBar');
@@ -663,7 +679,7 @@
     map.whenReady(() => {
       map.invalidateSize();
       const pos = getInterpolatedPosition(pathProgress);
-      setMotoRotation(pos.bearing);
+      setMotoRotation(pos.rotation);
       mapReady = true;
       if (!prefersReducedMotion && !userPaused && parcoursSection?.getBoundingClientRect().top < window.innerHeight) {
         startAnimation();
@@ -693,6 +709,8 @@
 
     mapEl.addEventListener('mouseenter', () => map.scrollWheelZoom.enable());
     mapEl.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
+
+    map.on('zoomend moveend', refreshMotoRotationFromPath);
 
     window.RaidMap = {
       loadTrip: loadTripRoute,
