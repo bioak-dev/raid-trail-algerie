@@ -148,7 +148,7 @@
   const MOTO_SPEED = 10; /* points par seconde le long du tracé */
   const STAGE_ZOOM = 9;
   const FOLLOW_MARGIN = 0.28; /* marge écran avant recentrage */
-  const MOTO_ICON_HEADING_OFFSET = -90; /* icône retournée (CSS) : 0° = est, cap = bearing - 90 */
+  const DEFAULT_MOTO_ROTATION = { offset: 90, flip: false };
 
   let map, motoMarker, traveledLine, backgroundLine, pathPoints = [], stagePathIndex = [];
   let segmentLines = [];
@@ -162,6 +162,7 @@
   let stageMarkers = [];
   let userPaused = false;
   let motoRotationDeg = null;
+  let activeMotoFlip = false;
   let isResetting = false;
   let stageFlying = false;
   let lastFollowTime = 0;
@@ -225,6 +226,7 @@
     pathProgress = 0;
     currentStage = 0;
     motoRotationDeg = null;
+    activeMotoFlip = false;
     isResetting = false;
 
     backgroundLine = L.polyline(pathPoints, {
@@ -279,9 +281,12 @@
       }).addTo(map);
     });
 
-    const startRotation = getMotoRotationDeg(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
+    const startOrientation = getMotoOrientation(
+      pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1], 0
+    );
+    activeMotoFlip = startOrientation.flip;
     motoMarker = L.marker(pathPoints[0], {
-      icon: createMotoIcon(startRotation),
+      icon: createMotoIcon(startOrientation.rotation, startOrientation.flip),
       pane: 'motoPane',
       zIndexOffset: 1000,
       interactive: false
@@ -355,26 +360,44 @@
     return Math.atan2(dx, -dy) * 180 / Math.PI;
   }
 
-  function getMotoRotationDeg(lat1, lng1, lat2, lng2) {
-    return getScreenBearing(lat1, lng1, lat2, lng2) + MOTO_ICON_HEADING_OFFSET;
+  function getLegMotoConfig(legIndex) {
+    const trip = getTrip(activeTripId);
+    const cfg = trip?.motoLegConfig?.[legIndex];
+    return cfg || DEFAULT_MOTO_ROTATION;
   }
 
-  function motoTransformStyle(rotationDeg) {
-    return `rotate(${rotationDeg}deg) scaleX(-1)`;
+  function legIndexForPathIndex(idx) {
+    for (let i = 0; i < stagePathIndex.length - 1; i++) {
+      if (idx < stagePathIndex[i + 1]) return i;
+    }
+    return Math.max(0, routeStages.length - 2);
   }
 
-  function createMotoIcon(rotationDeg) {
+  function getMotoOrientation(lat1, lng1, lat2, lng2, legIndex) {
+    const cfg = getLegMotoConfig(legIndex);
+    return {
+      rotation: getScreenBearing(lat1, lng1, lat2, lng2) + cfg.offset,
+      flip: cfg.flip
+    };
+  }
+
+  function motoTransformStyle(rotationDeg, flip) {
+    return flip ? `rotate(${rotationDeg}deg) scaleX(-1)` : `rotate(${rotationDeg}deg)`;
+  }
+
+  function createMotoIcon(rotationDeg, flip) {
     return L.divIcon({
       className: 'moto-marker-wrap',
-      html: `<div class="moto-marker-inner" style="transform:${motoTransformStyle(rotationDeg)}"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
+      html: `<div class="moto-marker-inner" style="transform:${motoTransformStyle(rotationDeg, flip)}"><img class="moto-marker-img" src="${MOTO_ICON_SRC}" width="${MOTO_ICON_W}" height="${MOTO_ICON_H}" alt="" draggable="false"></div>`,
       iconSize: [MOTO_ICON_W, MOTO_ICON_H],
       iconAnchor: [MOTO_ICON_W / 2, MOTO_ICON_H / 2]
     });
   }
 
-  function setMotoRotation(rotationDeg, immediate) {
+  function setMotoRotation(rotationDeg, flip, immediate) {
     const el = motoMarker?.getElement()?.querySelector('.moto-marker-inner');
     if (!el) return;
+    activeMotoFlip = flip;
     const target = rotationDeg;
     if (motoRotationDeg === null || immediate) {
       motoRotationDeg = target;
@@ -384,7 +407,7 @@
       if (diff < -180) diff += 360;
       motoRotationDeg += diff * 0.35;
     }
-    el.style.transform = motoTransformStyle(motoRotationDeg);
+    el.style.transform = motoTransformStyle(motoRotationDeg, activeMotoFlip);
   }
 
   function refreshMotoRotationFromPath() {
@@ -392,7 +415,8 @@
     const idx = Math.min(Math.floor(pathProgress), pathPoints.length - 2);
     const a = pathPoints[idx];
     const b = pathPoints[idx + 1];
-    setMotoRotation(getMotoRotationDeg(a[0], a[1], b[0], b[1]), true);
+    const orient = getMotoOrientation(a[0], a[1], b[0], b[1], legIndexForPathIndex(idx));
+    setMotoRotation(orient.rotation, orient.flip, true);
   }
 
   function getInterpolatedPosition(progress) {
@@ -402,10 +426,12 @@
     const frac = p - idx;
     const a = pathPoints[idx];
     const b = pathPoints[Math.min(idx + 1, max)];
+    const orient = getMotoOrientation(a[0], a[1], b[0], b[1], legIndexForPathIndex(idx));
     return {
       lat: a[0] + (b[0] - a[0]) * frac,
       lng: a[1] + (b[1] - a[1]) * frac,
-      rotation: getMotoRotationDeg(a[0], a[1], b[0], b[1]),
+      rotation: orient.rotation,
+      flip: orient.flip,
       idx
     };
   }
@@ -567,7 +593,7 @@
     const pos = getInterpolatedPosition(pathProgress);
 
     motoMarker.setLatLng([pos.lat, pos.lng]);
-    setMotoRotation(pos.rotation);
+    setMotoRotation(pos.rotation, pos.flip);
     updateTraveledLine(pathProgress);
 
     const progressBar = document.getElementById('journeyProgressBar');
@@ -684,7 +710,7 @@
     map.whenReady(() => {
       map.invalidateSize();
       const pos = getInterpolatedPosition(pathProgress);
-      setMotoRotation(pos.rotation);
+      setMotoRotation(pos.rotation, pos.flip);
       mapReady = true;
       if (!prefersReducedMotion && !userPaused && parcoursSection?.getBoundingClientRect().top < window.innerHeight) {
         startAnimation();

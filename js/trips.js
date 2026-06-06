@@ -38,6 +38,7 @@ const RAID_TRIPS = [
     mapTitle: 'Nord & Kabylie',
     mapSubtitle: 'Skikda, gorges de Constantine, Djurdjura — 1 200 km jusqu\'à Oran.',
     mapDefaultView: { lat: 36.3, lng: 4.5, zoom: 7 },
+    motoLegConfig: null,
     routeStages: [
       {
         lat: 36.876, lng: 6.909,
@@ -125,6 +126,13 @@ const RAID_TRIPS = [
     mapTitle: 'Portes du Sahara',
     mapSubtitle: 'Alger, canyons du Ghoufi, Ghardaïa et les dunes d\'El Oued — l\'Algérie profonde en maxi-trail.',
     mapDefaultView: { lat: 33.8, lng: 4.8, zoom: 6 },
+    /* offset + flip par leg — leg 2 (Ghoufi→Ghardaïa) en mode Nord, reste retourné pour le sud-est */
+    motoLegConfig: [
+      { offset: -90, flip: true },
+      { offset: -90, flip: true },
+      { offset: 90, flip: false },
+      { offset: -90, flip: true }
+    ],
     routeStages: [
       {
         lat: 36.753, lng: 3.058,
