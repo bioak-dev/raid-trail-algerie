@@ -828,7 +828,8 @@ section { padding: 6rem 0; }
 
 /* ── Roadtrip catalog ── */
 .roadtrip-filters,
-.trip-pricing-tabs {
+.trip-pricing-tabs,
+.journey-trip-tabs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -837,7 +838,8 @@ section { padding: 6rem 0; }
 }
 
 .roadtrip-filter,
-.trip-pricing-tab {
+.trip-pricing-tab,
+.journey-trip-tab {
   font-family: var(--font-title);
   font-weight: 600;
   font-size: 0.78rem;
@@ -853,13 +855,15 @@ section { padding: 6rem 0; }
 }
 
 .roadtrip-filter:hover,
-.trip-pricing-tab:hover {
+.trip-pricing-tab:hover,
+.journey-trip-tab:hover {
   border-color: var(--terra);
   color: var(--terra);
 }
 
 .roadtrip-filter.is-active,
-.trip-pricing-tab.is-active {
+.trip-pricing-tab.is-active,
+.journey-trip-tab.is-active {
   background: var(--terra);
   border-color: var(--terra);
   color: var(--white);

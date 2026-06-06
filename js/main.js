@@ -137,48 +137,9 @@
   });
 
   /* ── Interactive journey map ── */
-  const routeStages = [
-    {
-      lat: 36.876, lng: 6.909,
-      name: 'Skikda',
-      tag: 'Jour 1 · Départ',
-      desc: 'Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.',
-      image: 'images/route-skikda.jpg',
-      imageAlt: 'Côte de Skikda, pins et falaises sur la Méditerranée'
-    },
-    {
-      lat: 36.365, lng: 6.615,
-      name: 'Constantine',
-      tag: 'Jour 2 · Gorges',
-      desc: 'La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.',
-      image: 'images/route-constantine.jpg',
-      imageAlt: 'Ponts suspendus et gorges de Constantine'
-    },
-    {
-      lat: 36.497, lng: 5.283,
-      name: 'Kherrata',
-      tag: 'Jour 3 · Canyon',
-      desc: 'Canyon aux parois rouges — passage étroit et paysages grandioses.',
-      image: 'images/route-kherrata.jpg',
-      imageAlt: 'Gorges de Kherrata, canyon de roche rouge'
-    },
-    {
-      lat: 36.417, lng: 4.167,
-      name: 'Djurdjura',
-      tag: 'Jours 4–5 · Montagne',
-      desc: 'Massif à 2 000 m — cols, forêts de cèdres et vues à perte de vue.',
-      image: 'images/route-djurdjura.jpg',
-      imageAlt: 'Sommets enneigés du Djurdjura'
-    },
-    {
-      lat: 35.697, lng: -0.633,
-      name: 'Oran',
-      tag: 'Jour 7 · Arrivée',
-      desc: 'Arrivée sur la côte ouest — baie méditerranéenne et dernière étape conviviale.',
-      image: 'images/route-oran.jpg',
-      imageAlt: 'Front de mer et baie d\'Oran au coucher du soleil'
-    }
-  ];
+  const trips = window.RAID_TRIPS || [];
+  let activeTripId = trips[0]?.id || null;
+  let routeStages = [];
 
   const MOTO_ICON_SRC = 'images/moto-tenere-icon.png';
   const MOTO_ICON_W = 56;
@@ -188,7 +149,9 @@
   const STAGE_ZOOM = 9;
   const FOLLOW_MARGIN = 0.28; /* marge écran avant recentrage */
 
-  let map, motoMarker, traveledLine, pathPoints = [], stagePathIndex = [];
+  let map, motoMarker, traveledLine, backgroundLine, pathPoints = [], stagePathIndex = [];
+  let segmentLines = [];
+  let cityLabelMarkers = [];
   let mapReady = false;
   let pathProgress = 0;
   let animating = false;
@@ -201,6 +164,157 @@
   let isResetting = false;
   let stageFlying = false;
   let lastFollowTime = 0;
+
+  function getTrip(id) {
+    return trips.find(t => t.id === id) || trips[0];
+  }
+
+  function updateMapHeader(trip) {
+    const title = document.getElementById('journeyMapTitle');
+    const subtitle = document.getElementById('journeyMapSubtitle');
+    if (title) title.textContent = trip?.mapTitle || trip?.title || 'Le parcours';
+    if (subtitle) subtitle.textContent = trip?.mapSubtitle || trip?.route || '';
+  }
+
+  function buildTripTabs() {
+    const el = document.getElementById('journeyTripTabs');
+    if (!el || !trips.length) return;
+
+    el.innerHTML = trips.map(trip => `
+      <button
+        type="button"
+        class="journey-trip-tab${activeTripId === trip.id ? ' is-active' : ''}"
+        data-trip-id="${trip.id}"
+        role="tab"
+        aria-selected="${activeTripId === trip.id ? 'true' : 'false'}"
+      >${trip.title}</button>
+    `).join('');
+
+    el.querySelectorAll('.journey-trip-tab').forEach(btn => {
+      btn.addEventListener('click', () => loadTripRoute(btn.dataset.tripId, { restart: true }));
+    });
+  }
+
+  function clearMapRouteLayers() {
+    stopAnimation(true);
+    segmentLines.forEach(line => map?.removeLayer(line));
+    segmentLines = [];
+    stageMarkers.forEach(marker => map?.removeLayer(marker));
+    stageMarkers = [];
+    cityLabelMarkers.forEach(marker => map?.removeLayer(marker));
+    cityLabelMarkers = [];
+    if (backgroundLine) {
+      map.removeLayer(backgroundLine);
+      backgroundLine = null;
+    }
+    if (traveledLine) {
+      map.removeLayer(traveledLine);
+      traveledLine = null;
+    }
+    if (motoMarker) {
+      map.removeLayer(motoMarker);
+      motoMarker = null;
+    }
+  }
+
+  function buildRouteLayers() {
+    const path = buildDensePath(routeStages, 80);
+    pathPoints = path.points;
+    stagePathIndex = path.stagePathIndex;
+    pathProgress = 0;
+    currentStage = 0;
+    motoRotationDeg = null;
+    isResetting = false;
+
+    backgroundLine = L.polyline(pathPoints, {
+      color: '#E8D5B7',
+      weight: 8,
+      opacity: 0.95,
+      lineCap: 'round',
+      lineJoin: 'round',
+      pane: 'routePane'
+    }).addTo(map);
+
+    traveledLine = L.polyline([], {
+      color: '#B85C38',
+      weight: 6,
+      opacity: 1,
+      lineCap: 'round',
+      lineJoin: 'round',
+      pane: 'routePane'
+    }).addTo(map);
+
+    for (let i = 0; i < routeStages.length - 1; i++) {
+      const start = pathIndexForStage(i);
+      const end = pathIndexForStage(i + 1);
+      const segPoints = pathPoints.slice(start, end + 1);
+      const targetStage = i + 1;
+      const segment = L.polyline(segPoints, {
+        color: 'transparent',
+        weight: 16,
+        opacity: 0,
+        className: 'route-segment',
+        pane: 'routePane'
+      }).addTo(map);
+      segment.on('click', () => selectStage(targetStage, true));
+      segmentLines.push(segment);
+    }
+
+    stageMarkers = routeStages.map((s, i) => {
+      const marker = L.marker([s.lat, s.lng], {
+        icon: createStageIcon(i + 1, i === 0),
+        zIndexOffset: 1000
+      }).addTo(map);
+      marker.on('click', () => selectStage(i, true));
+      return marker;
+    });
+
+    cityLabelMarkers = routeStages.map((s) => {
+      return L.marker([s.lat, s.lng], {
+        icon: createCityLabel(s.name),
+        pane: 'labelPane',
+        interactive: false,
+        zIndexOffset: 2000
+      }).addTo(map);
+    });
+
+    const startAngle = getIconAngle(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
+    motoMarker = L.marker(pathPoints[0], {
+      icon: createMotoIcon(startAngle),
+      pane: 'motoPane',
+      zIndexOffset: 1000,
+      interactive: false
+    }).addTo(map);
+
+    map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48], animate: false });
+    buildTimeline();
+    updatePreview(0, false);
+    updateTraveledLine(0);
+
+    const progressBar = document.getElementById('journeyProgressBar');
+    if (progressBar) progressBar.style.width = '0%';
+  }
+
+  function loadTripRoute(tripId, options = {}) {
+    const trip = getTrip(tripId);
+    if (!trip?.routeStages?.length || !map) return;
+
+    activeTripId = trip.id;
+    routeStages = trip.routeStages;
+
+    updateMapHeader(trip);
+    buildTripTabs();
+    clearMapRouteLayers();
+    buildRouteLayers();
+
+    if (options.restart && !prefersReducedMotion) {
+      userPaused = false;
+      const parcoursSection = document.getElementById('parcours');
+      if (parcoursSection?.getBoundingClientRect().top < window.innerHeight) {
+        setTimeout(() => startAnimation(true), 400);
+      }
+    }
+  }
 
   function buildDensePath(stages, stepsPerLeg) {
     const points = [[stages[0].lat, stages[0].lng]];
@@ -517,15 +631,17 @@
 
   function initMap() {
     const mapEl = document.getElementById('map');
-    if (!mapEl || typeof L === 'undefined') return;
+    if (!mapEl || typeof L === 'undefined' || !trips.length) return;
 
-    buildTimeline();
+    const initialTrip = getTrip(new URLSearchParams(window.location.search).get('trip') || trips[0].id);
+    activeTripId = initialTrip.id;
+    routeStages = initialTrip.routeStages || [];
 
-    const path = buildDensePath(routeStages, 80);
-    pathPoints = path.points;
-    stagePathIndex = path.stagePathIndex;
+    updateMapHeader(initialTrip);
+    buildTripTabs();
 
-    map = L.map('map', { scrollWheelZoom: false }).setView([36.3, 4.5], 7);
+    const view = initialTrip.mapDefaultView || { lat: 36.3, lng: 4.5, zoom: 7 };
+    map = L.map('map', { scrollWheelZoom: false }).setView([view.lat, view.lng], view.zoom);
 
     map.createPane('routePane');
     map.createPane('motoPane');
@@ -534,78 +650,13 @@
     map.getPane('motoPane').style.zIndex = 650;
     map.getPane('labelPane').style.zIndex = 700;
 
-    /* Fond sans libellés OSM — noms des villes ajoutés en français */
     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(map);
 
-    /* Tracé de fond */
-    L.polyline(pathPoints, {
-      color: '#E8D5B7',
-      weight: 8,
-      opacity: 0.95,
-      lineCap: 'round',
-      lineJoin: 'round',
-      pane: 'routePane'
-    }).addTo(map);
-
-    /* Tracé parcouru par la moto */
-    traveledLine = L.polyline([], {
-      color: '#B85C38',
-      weight: 6,
-      opacity: 1,
-      lineCap: 'round',
-      lineJoin: 'round',
-      pane: 'routePane'
-    }).addTo(map);
-
-    /* Segments cliquables par étape */
-    for (let i = 0; i < routeStages.length - 1; i++) {
-      const start = pathIndexForStage(i);
-      const end = pathIndexForStage(i + 1);
-      const segPoints = pathPoints.slice(start, end + 1);
-      const targetStage = i + 1;
-      L.polyline(segPoints, {
-        color: 'transparent',
-        weight: 16,
-        opacity: 0,
-        className: 'route-segment',
-        pane: 'routePane'
-      }).addTo(map).on('click', () => selectStage(targetStage, true));
-    }
-
-    /* Marqueurs d'étapes */
-    stageMarkers = routeStages.map((s, i) => {
-      const marker = L.marker([s.lat, s.lng], {
-        icon: createStageIcon(i + 1, i === 0),
-        zIndexOffset: 1000
-      }).addTo(map);
-      marker.on('click', () => selectStage(i, true));
-      return marker;
-    });
-
-    /* Libellés des villes — français uniquement */
-    routeStages.forEach((s) => {
-      L.marker([s.lat, s.lng], {
-        icon: createCityLabel(s.name),
-        pane: 'labelPane',
-        interactive: false,
-        zIndexOffset: 2000
-      }).addTo(map);
-    });
-
-    /* Moto animée — toujours au-dessus du tracé */
-    const startAngle = getIconAngle(pathPoints[0][0], pathPoints[0][1], pathPoints[1][0], pathPoints[1][1]);
-    motoMarker = L.marker(pathPoints[0], {
-      icon: createMotoIcon(startAngle),
-      pane: 'motoPane',
-      zIndexOffset: 1000,
-      interactive: false
-    }).addTo(map);
-
-    map.fitBounds(L.latLngBounds(pathPoints), { padding: [48, 48], animate: false });
+    buildRouteLayers();
 
     const parcoursSection = document.getElementById('parcours');
 
@@ -643,7 +694,15 @@
     mapEl.addEventListener('mouseenter', () => map.scrollWheelZoom.enable());
     mapEl.addEventListener('mouseleave', () => map.scrollWheelZoom.disable());
 
-    updatePreview(0, false);
+    window.RaidMap = {
+      loadTrip: loadTripRoute,
+      getActiveTripId: () => activeTripId
+    };
+
+    if (window.__pendingMapTrip) {
+      loadTripRoute(window.__pendingMapTrip, { restart: false });
+      delete window.__pendingMapTrip;
+    }
   }
 
   if (document.readyState === 'loading') {

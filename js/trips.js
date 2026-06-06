@@ -35,6 +35,51 @@ const RAID_TRIPS = [
     motoType: 'Trail ou adventure',
     bookingSubject: 'Raid Nord & Kabylie',
     mapSection: '#parcours',
+    mapTitle: 'De la côte à l\'Atlas',
+    mapSubtitle: 'Skikda, gorges de Constantine, Djurdjura — 1 200 km jusqu\'à Oran.',
+    mapDefaultView: { lat: 36.3, lng: 4.5, zoom: 7 },
+    routeStages: [
+      {
+        lat: 36.876, lng: 6.909,
+        name: 'Skikda',
+        tag: 'Jour 1 · Départ',
+        desc: 'Départ sur la côte est — falaises, pins maritimes et premières pistes en bord de mer.',
+        image: 'images/route-skikda.jpg',
+        imageAlt: 'Côte de Skikda, pins et falaises sur la Méditerranée'
+      },
+      {
+        lat: 36.365, lng: 6.615,
+        name: 'Constantine',
+        tag: 'Jour 2 · Gorges',
+        desc: 'La cité des ponts suspendus — gorges du Rhumel et routes à flanc de falaise.',
+        image: 'images/route-constantine.jpg',
+        imageAlt: 'Ponts suspendus et gorges de Constantine'
+      },
+      {
+        lat: 36.497, lng: 5.283,
+        name: 'Kherrata',
+        tag: 'Jour 3 · Canyon',
+        desc: 'Canyon aux parois rouges — passage étroit et paysages grandioses.',
+        image: 'images/route-kherrata.jpg',
+        imageAlt: 'Gorges de Kherrata, canyon de roche rouge'
+      },
+      {
+        lat: 36.417, lng: 4.167,
+        name: 'Djurdjura',
+        tag: 'Jours 4–5 · Montagne',
+        desc: 'Massif à 2 000 m — cols, forêts de cèdres et vues à perte de vue.',
+        image: 'images/route-djurdjura.jpg',
+        imageAlt: 'Sommets enneigés du Djurdjura'
+      },
+      {
+        lat: 35.697, lng: -0.633,
+        name: 'Oran',
+        tag: 'Jour 7 · Arrivée',
+        desc: 'Arrivée sur la côte ouest — baie méditerranéenne et dernière étape conviviale.',
+        image: 'images/route-oran.jpg',
+        imageAlt: 'Front de mer et baie d\'Oran au coucher du soleil'
+      }
+    ],
     dates: [
       { date: '12 avril 2026', places: '4 / 12', status: 'limited', statusLabel: 'Presque complet' },
       { date: '3 mai 2026', places: '8 / 12', status: 'open', statusLabel: 'Ouvert' },
@@ -76,7 +121,52 @@ const RAID_TRIPS = [
     minMotos: 4,
     motoType: 'Maxi-trail ou adventure',
     bookingSubject: 'Raid Portes du Sahara',
-    mapSection: '#roadtrips',
+    mapSection: '#parcours',
+    mapTitle: 'Portes du Sahara',
+    mapSubtitle: 'Alger, canyons du Ghoufi, Ghardaïa et les dunes d\'El Oued — l\'Algérie profonde en maxi-trail.',
+    mapDefaultView: { lat: 33.8, lng: 4.8, zoom: 6 },
+    routeStages: [
+      {
+        lat: 36.753, lng: 3.058,
+        name: 'Alger',
+        tag: 'Jour 1 · Départ',
+        desc: 'Départ depuis la capitale — dernières traces urbaines avant l\'immensité du Sud algérien.',
+        image: 'images/gallery-12.jpg',
+        imageAlt: 'Port et horizon méditerranéen'
+      },
+      {
+        lat: 34.851, lng: 5.724,
+        name: 'Biskra',
+        tag: 'Jour 2 · Porte du désert',
+        desc: 'Première oasis — palmiers, chaleur sèche et pistes qui s\'ouvrent vers le Sahara.',
+        image: 'images/gallery-03.jpg',
+        imageAlt: 'Dunes dorées au lever du soleil'
+      },
+      {
+        lat: 35.427, lng: 5.967,
+        name: 'Ghoufi',
+        tag: 'Jour 3 · Canyons',
+        desc: 'Les canyons de Ghoufi — falaises vertigineuses creusées par le temps, un décor de cinéma.',
+        image: 'images/gallery-10.jpg',
+        imageAlt: 'Ruines antiques en lumière dorée'
+      },
+      {
+        lat: 32.483, lng: 3.673,
+        name: 'Ghardaïa',
+        tag: 'Jours 4–5 · Mzab',
+        desc: 'Architecture millénaire de la vallée du Mzab — kasbahs ocre et ruelles vivantes.',
+        image: 'images/gallery-06.jpg',
+        imageAlt: 'Kasbah ancienne sur les hauteurs'
+      },
+      {
+        lat: 33.368, lng: 6.867,
+        name: 'El Oued',
+        tag: 'Jour 7 · Arrivée',
+        desc: 'La ville aux mille coupoles — coucher de soleil sur les dunes, fin de l\'aventure.',
+        image: 'images/gallery-08.jpg',
+        imageAlt: 'Bivouac sous un ciel étoilé'
+      }
+    ],
     dates: [
       { date: '18 octobre 2026', places: '6 / 10', status: 'open', statusLabel: 'Ouvert' },
       { date: '8 novembre 2026', places: '4 / 10', status: 'limited', statusLabel: 'Presque complet' },

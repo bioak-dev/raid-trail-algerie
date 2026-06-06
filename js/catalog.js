@@ -89,7 +89,7 @@
             <span class="roadtrip-card-status ${cardStatusClass(trip.statusType)}">${escapeHtml(trip.status)}</span>
           </div>
           <div class="roadtrip-card-actions">
-            <a href="${escapeHtml(trip.mapSection)}" class="btn btn-outline roadtrip-card-btn-secondary">Découvrir</a>
+            <a href="#parcours" class="btn btn-outline roadtrip-card-btn-secondary roadtrip-discover-btn" data-trip-id="${trip.id}">Découvrir</a>
             <button type="button" class="btn btn-primary roadtrip-book-btn" data-trip-id="${trip.id}">Réserver</button>
           </div>
         </div>
@@ -99,6 +99,19 @@
     grid.querySelectorAll('.roadtrip-book-btn').forEach(btn => {
       btn.addEventListener('click', () => bookTrip(btn.dataset.tripId));
     });
+
+    grid.querySelectorAll('.roadtrip-discover-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        discoverTrip(btn.dataset.tripId);
+      });
+    });
+  }
+
+  function discoverTrip(tripId) {
+    syncContactTrip(tripId, false);
+    window.RaidMap?.loadTrip(tripId, { restart: true });
+    document.getElementById('parcours')?.scrollIntoView({ behavior: 'smooth' });
   }
 
   function renderPricingTabs() {
@@ -121,6 +134,7 @@
         renderPricingTabs();
         renderPricingPanel();
         syncContactTrip(activePricingTripId, false);
+        window.RaidMap?.loadTrip(activePricingTripId, { restart: false });
       });
     });
   }
@@ -247,6 +261,7 @@
     if (tripId && getTrip(tripId)) {
       activePricingTripId = tripId;
       syncContactTrip(tripId, false);
+      if (!window.RaidMap) window.__pendingMapTrip = tripId;
     }
   }
 
@@ -262,7 +277,13 @@
 
     document.getElementById('contactTrip')?.addEventListener('change', (e) => {
       syncContactTrip(e.target.value, false);
+      window.RaidMap?.loadTrip(e.target.value, { restart: false });
     });
+
+    if (window.__pendingMapTrip && window.RaidMap) {
+      window.RaidMap.loadTrip(window.__pendingMapTrip, { restart: false });
+      delete window.__pendingMapTrip;
+    }
   }
 
   if (document.readyState === 'loading') {
